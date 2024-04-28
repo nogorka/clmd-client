@@ -13,6 +13,7 @@
   "dependencies": {
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
+    "primeicons": "^7.0.0",
     "vite-plugin-pwa": "^0.19.8",
     "vue": "^3.4.21",
     "vue-pwa-asset-generator": "^1.7.3",
