@@ -4,6 +4,7 @@ import NotFound from '@/views/NotFound.vue'
 import FileImport from '@/views/FileImport.vue'
 import ManualInput from '@/views/ManualInput.vue'
 import ScanQr from '@/views/ScanQr.vue'
+import MapDisplay from '@/views/map-display.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,18 +16,23 @@ const router = createRouter({
     },
     {
       path: '/import-file',
-      name: 'FileImport',
+      name: 'fileImport',
       component: FileImport
     },
     {
       path: '/manual-input',
-      name: 'ManualInput',
+      name: 'manualInput',
       component: ManualInput
     },
     {
       path: '/scan-qr',
-      name: 'ScanQR',
+      name: 'scanQR',
       component: ScanQr
+    },
+    {
+      path: '/map',
+      name: 'map',
+      component: MapDisplay
     },
     {
       path: '/:catchAll(.*)',
