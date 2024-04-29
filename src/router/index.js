@@ -11,7 +11,7 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/404',
+      path: '/:catchAll(.*)',
       name: 'notFound',
       component: NotFound
     }
