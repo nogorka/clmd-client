@@ -1,21 +1,23 @@
 <script setup>
 import GoBack from '@/components/go-back.vue'
-import { QrcodeStream } from 'vue-qrcode-reader';
+import { QrcodeStream } from 'vue-qrcode-reader'
 
 const onDecode = (result) => {
-  console.log('Decoded result:', result);
+  console.log('Decoded result:', result)
   // You can route or perform actions based on the result here
 }
 const onInit = (promise) => {
-  promise.then(() => {
-    console.log('QR Code scanner initialized');
-  }).catch(error => {
-    if (error.name === 'NotAllowedError') {
-      console.error('Permissions to access camera are denied');
-    } else if (error.name === 'NotFoundError') {
-      console.error('No camera on this device');
-    }
-  });
+  promise
+    .then(() => {
+      console.log('QR Code scanner initialized')
+    })
+    .catch((error) => {
+      if (error.name === 'NotAllowedError') {
+        console.error('Permissions to access camera are denied')
+      } else if (error.name === 'NotFoundError') {
+        console.error('No camera on this device')
+      }
+    })
 }
 </script>
 
