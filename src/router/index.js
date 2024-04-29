@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '@/views/HomeView.vue'
 import NotFound from '@/views/NotFound.vue'
+import FileImport from '@/views/FileImport.vue'
+import ManualInput from '@/views/ManualInput.vue'
+import ScanQr from '@/views/ScanQr.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,18 +14,26 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/import-file',
+      name: 'FileImport',
+      component: FileImport
+    },
+    {
+      path: '/manual-input',
+      name: 'ManualInput',
+      component: ManualInput
+    },
+    {
+      path: '/scan-qr',
+      name: 'ScanQR',
+      component: ScanQr
+    },
+    {
       path: '/:catchAll(.*)',
       name: 'notFound',
       component: NotFound
     }
   ]
-})
-
-router.afterEach((to, from, failure) => {
-  console.log(to, from, failure)
-  if (failure) {
-    router.push({ name: 'notFound' })
-  }
 })
 
 export default router
