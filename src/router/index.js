@@ -4,7 +4,7 @@ import NotFound from '@/views/NotFound.vue'
 import FileImport from '@/views/FileImport.vue'
 import ManualInput from '@/views/ManualInput.vue'
 import ScanQr from '@/views/ScanQr.vue'
-import MapDisplay from '@/views/map-display.vue'
+import MapDisplay from '@/views/MapDisplay.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
