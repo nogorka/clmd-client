@@ -15,7 +15,7 @@ import { onMounted } from 'vue'
 import { initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import GoBack from '@/components/go-back.vue'
 
-import tempData from '../../resources/result-route-example.json'
+import tempData from '@/assets/example.json'
 import { useStore } from 'vuex'
 
 const store = useStore()
