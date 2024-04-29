@@ -1,4 +1,5 @@
 import L from 'leaflet'
+import store from '@/store/index.js'
 // import 'leaflet-routing-machine'
 // import 'leaflet-control-geocoder'
 
@@ -7,14 +8,17 @@ const config = {
   maxZoom: 19,
   attribution: '© OpenStreetMap contributors',
   urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  numberedMarkerCSS: 'destination-marker'
+  numberedMarkerCSS: 'destination-marker',
+  defaultLatLong: [59.9342802, 30.3350986]
 }
 
 export const initializeMap = (id) => {
-  const map = L.map(id)
-
   // TODO: replace with current GPS coords
-  map.setView([59.9342802, 30.3350986], config.zoom)
+  const { lat, long } = store.state.currentLocation
+  const center = lat ? [lat, long] : config.defaultLatLong
+
+  const map = L.map(id).setView(center, config.zoom)
+
   L.tileLayer(config.urlTemplate, {
     maxZoom: config.maxZoom,
     attribution: config.attribution
