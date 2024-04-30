@@ -5,29 +5,36 @@
       <h1 class="text-center text-2xl font-bold my-4">Map</h1>
     </div>
     <div class="flex h-full" v-loading="store.state.loading">
-      <div id="map" >
-<!--        <div id="route-info" class="route-info">-->
-<!--          &lt;!&ndash; Route summary will be displayed here &ndash;&gt;-->
-<!--        </div>-->
-      </div>
+      <div id="map" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { onDeactivated, onMounted, ref } from 'vue'
+import { onDeactivated, onMounted, ref, watch } from 'vue'
 import { initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import GoBack from '@/components/go-back.vue'
-
 import { useStore } from 'vuex'
 
+
 const store = useStore()
+const map = ref(null)
+
 
 store.dispatch('getLocation')
 
+watch(
+  () => store.state.optimalRoute,
+  (newRoute) => {
+    if (newRoute && map.value) {
+      visualizePointsFromJson(newRoute, map.value)
+    }
+  },
+  { immediate: true }
+)
+
 onMounted(() => {
-  const map = initializeMap('map')
-  // visualizePointsFromJson(store.state.optimalRoute, map)
+  map.value = initializeMap('map')
 })
 
 onDeactivated(() => {
@@ -49,23 +56,4 @@ onDeactivated(() => {
   line-height: 14px;
 }
 
-.leaflet-routing-container {
-  background-color: #f8f9fa;
-}
-
-.route-info {
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-
-.leaflet-routing-container .leaflet-routing-itinerary {
-  display: none;
-}
-
-.leaflet-routing-container .leaflet-routing-alt {
-  padding: 10px;
-  border: none;
-  background: #f8f9fa; /* Change the background as needed */
-}
 </style>
