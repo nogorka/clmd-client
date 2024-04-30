@@ -15,7 +15,6 @@ const config = {
   key: keyJson.key
 }
 
-
 export const initializeMap = (id) => {
   // TODO: replace with current GPS coords
   const { lat, long } = store.state.currentLocation
@@ -31,16 +30,12 @@ export const initializeMap = (id) => {
   return map
 }
 
-
 // Visualize points from JSON data
 export const visualizePointsFromJson = (jsonData, map) => {
   const waypoints = []
-  jsonData?.forEach((entry, index) =>
-    processJsonEntry(entry, index, map, waypoints)
-  )
+  jsonData?.forEach((entry, index) => processJsonEntry(entry, index, map, waypoints))
   routing(map, waypoints)
 }
-
 
 // Process each entry from the JSON data
 const processJsonEntry = (entry, index, map, waypoints) => {
@@ -53,17 +48,15 @@ const processJsonEntry = (entry, index, map, waypoints) => {
   L.marker([lat, long]).addTo(map)
 }
 
-
 const numberIconMarker = (number) =>
   L.divIcon({
     className: config.numberedMarkerCSS,
     html: number
   })
 
-
 const routing = (map, waypoints) => {
   if (waypoints.length > 1) {
-    const control = L.Routing.control({
+    L.Routing.control({
       waypoints,
       router: new L.Routing.GraphHopper(config.key, {
         urlParameters: {
@@ -71,20 +64,18 @@ const routing = (map, waypoints) => {
         }
       })
     }).addTo(map)
-
-    L.Routing.itinerary({
-      collapsible: true,
-      show: false
-    }).addTo(map)
-
+    //
+    // L.Routing.itinerary({
+    //   collapsible: true,
+    //   show: false
+    // }).addTo(map)
 
     //   control.on('routesfound', function(e) {
-  //     const { summary } = e.routes[0]
-  //     document.getElementById('route-info').innerHTML = `
-  //   <strong>Distance:</strong> ${(summary.totalDistance / 1000).toFixed(2)} km<br>
-  //   <strong>Estimated Time:</strong> ${Math.round(summary.totalTime / 60)} min
-  // `
-  //   })
-
+    //     const { summary } = e.routes[0]
+    //     document.getElementById('route-info').innerHTML = `
+    //   <strong>Distance:</strong> ${(summary.totalDistance / 1000).toFixed(2)} km<br>
+    //   <strong>Estimated Time:</strong> ${Math.round(summary.totalTime / 60)} min
+    // `
+    //   })
   }
 }
