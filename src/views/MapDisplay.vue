@@ -5,7 +5,11 @@
       <h1 class="text-center text-2xl font-bold my-4">Map</h1>
     </div>
     <div class="flex h-full">
-      <div id="map"></div>
+      <div id="map">
+        <div id="route-info" class="route-info">
+          <!-- Route summary will be displayed here -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -41,4 +45,25 @@ onMounted(() => {
   text-align: center;
   line-height: 14px;
 }
+
+.leaflet-routing-container {
+  background-color: #f8f9fa;
+}
+
+.route-info {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.leaflet-routing-container .leaflet-routing-itinerary {
+  display: none;
+}
+
+.leaflet-routing-container .leaflet-routing-alt {
+  padding: 10px;
+  border: none;
+  background: #f8f9fa;  /* Change the background as needed */
+}
+
 </style>
