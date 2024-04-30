@@ -13,7 +13,7 @@
 
 <script setup>
 import { onDeactivated, onMounted, ref, watch } from 'vue'
-import { initializeMap, visualizePointsFromJson } from '@/utils/map.js'
+import { config, initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import { useStore } from 'vuex'
 
 import GoBack from '@/components/go-back.vue'
@@ -22,7 +22,7 @@ import MapSummary from '@/components/map-summary.vue'
 
 const store = useStore()
 const map = ref(null)
-
+const currentLocationMarker = ref(null)
 
 store.dispatch('getLocation')
 
@@ -38,6 +38,29 @@ watch(
 
 onMounted(() => {
   map.value = initializeMap('map')
+
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords
+        const newLocation = L.latLng(latitude, longitude)
+        if (!currentLocationMarker.value) {
+          currentLocationMarker.value = L.marker(newLocation, {
+            icon: L.icon(config.car)
+          }).addTo(map.value)
+        } else {
+          currentLocationMarker.value.setLatLng(newLocation)
+        }
+        map.value.panTo(newLocation)
+      },
+      (error) => {
+        console.error(error)
+      },
+      {
+        enableHighAccuracy: true
+      }
+    )
+  }
 })
 
 onDeactivated(() => {

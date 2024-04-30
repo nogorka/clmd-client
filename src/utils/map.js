@@ -7,14 +7,19 @@ import 'leaflet.fullscreen'
 import store from '@/store/index.js'
 import keyJson from '@/assets/key.json'
 
-const config = {
+export const config = {
   zoom: 11,
   maxZoom: 19,
   attribution: '© OpenStreetMap contributors',
   urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   numberedMarkerCSS: 'destination-marker',
   defaultLatLong: [59.9342802, 30.3350986],
-  key: keyJson.key
+  key: keyJson.key,
+  car: {
+    iconUrl: 'public/car.png',
+    iconSize: [30, 30],
+    iconAnchor: [30, 30]
+  }
 }
 
 export const initializeMap = (id) => {
@@ -70,10 +75,9 @@ const routing = (map, waypoints) => {
     }).addTo(map)
 
     control.on('routesfound', (e) => {
-        // TODO: dont forget to update when multiple routes will be available
-        const { summary } = e.routes[0]
-        store.dispatch('updateRouteInfo', summary)
-      }
-    )
+      // TODO: dont forget to update when multiple routes will be available
+      const { summary } = e.routes[0]
+      store.dispatch('updateRouteInfo', summary)
+    })
   }
 }
