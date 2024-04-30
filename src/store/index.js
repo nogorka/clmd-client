@@ -12,7 +12,7 @@ const store = createStore({
         route: [],
         length: 0,
         time: 0,
-        id: null,
+        id: null
       },
       loading: false
     }
@@ -65,10 +65,12 @@ const store = createStore({
     },
     clearRoute({ commit }) {
       commit('setOptimalRoute', [])
+      commit('setRouteTime', 0)
+      commit('setRouteLength', 0)
     },
-    updateRouteInfo({commit}, summary) {
-      commit('setRouteTime', summary.totalTime )
-      commit('setRouteLength', summary.totalDistance )
+    updateRouteInfo({ commit }, summary) {
+      commit('setRouteTime', summary.totalTime)
+      commit('setRouteLength', summary.totalDistance)
     }
   }
 })

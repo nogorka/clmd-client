@@ -19,7 +19,6 @@ import { useStore } from 'vuex'
 import GoBack from '@/components/go-back.vue'
 import MapSummary from '@/components/map-summary.vue'
 
-
 const store = useStore()
 const map = ref(null)
 const currentLocationMarker = ref(null)
@@ -64,13 +63,13 @@ onMounted(() => {
 })
 
 onDeactivated(() => {
-  store.dispatch('clearRoute')
+  store.dispatch('clearOptimalRoute')
 })
 </script>
 
 <style scoped>
 #map {
-  height: 80vh;
+  height: 500px;
   width: 100vw;
 }
 
@@ -85,5 +84,4 @@ onDeactivated(() => {
 :deep(.leaflet-routing-container) {
   display: none !important;
 }
-
 </style>
