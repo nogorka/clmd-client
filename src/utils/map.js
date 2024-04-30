@@ -1,6 +1,8 @@
 import L from 'leaflet'
 import 'leaflet-routing-machine'
 import 'lrm-graphhopper'
+import 'leaflet.fullscreen';
+
 // import 'leaflet-control-geocoder'
 import store from '@/store/index.js'
 import keyJson from '@/assets/key.json'
@@ -21,7 +23,11 @@ export const initializeMap = (id) => {
   // const center = lat ? [lat, long] : config.defaultLatLong
   const center = config.defaultLatLong
 
-  const map = L.map(id).setView(center, config.zoom)
+  const map = L.map(id,{
+    center,
+    zoom: config.zoom,
+    fullscreenControl: true
+  })
 
   L.tileLayer(config.urlTemplate, {
     maxZoom: config.maxZoom,
