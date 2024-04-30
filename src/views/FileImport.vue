@@ -1,6 +1,31 @@
 <script setup>
 import GoBack from '@/components/go-back.vue'
-import { UploadFilled } from '@element-plus/icons-vue'
+import { processCsv, processJson } from '@/utils/file.js'
+
+
+const onChange = (e) => {
+  const file = e.target.files[0]
+  if (!file) return
+
+  if (file.type !== 'application/json' && !file.name.endsWith('.csv')) {
+    alert('Only JSON or CSV files are allowed!')
+    return
+  }
+
+  const reader = new FileReader()
+  reader.onload = (event) => {
+    const content = event.target.result
+    if (file.type === 'application/json') {
+      processJson(content)
+    } else if (file.name.endsWith('.csv')) {
+      processCsv(content)
+    }
+  }
+
+  if (file.type === 'application/json' || file.name.endsWith('.csv')) {
+    reader.readAsText(file)
+  }
+}
 </script>
 
 <template>
@@ -8,15 +33,11 @@ import { UploadFilled } from '@element-plus/icons-vue'
     <go-back />
 
     <h1 class="text-center text-2xl font-bold my-4">File Import</h1>
-
-    <el-upload
-      class="upload-demo"
-      drag
-      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-      multiple
-    >
-      <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-      <div class="el-upload__text">Drop CSV/JSON file here or <em>click to upload</em></div>
-    </el-upload>
+    <input
+      class="block mx-auto my-4"
+      type='file'
+      accept=".json, .csv"
+      @change="onChange"
+    />
   </div>
 </template>
