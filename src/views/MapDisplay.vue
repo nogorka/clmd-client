@@ -56,4 +56,8 @@ onDeactivated(() => {
   line-height: 14px;
 }
 
+:deep(.leaflet-routing-container) {
+  display: none !important;
+}
+
 </style>
