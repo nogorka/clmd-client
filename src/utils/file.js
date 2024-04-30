@@ -1,4 +1,5 @@
 import Papa from 'papaparse'
+import store from '@/store'
 
 export const processCsv = (content) => {
   try {
@@ -8,7 +9,7 @@ export const processCsv = (content) => {
       skipEmptyLines: true
     })
     const jsonData = lines.data
-    console.log(jsonData)
+    store.dispatch('updateInputPoints', jsonData)
   } catch (error) {
     console.error('Error parsing CSV or JSON', error)
   }
@@ -17,7 +18,7 @@ export const processCsv = (content) => {
 export const processJson = (content) => {
   try {
     const jsonData = JSON.parse(content)
-    console.log(jsonData)
+    store.dispatch('updateInputPoints', jsonData)
   } catch (error) {
     console.error('Error parsing JSON!', error)
   }

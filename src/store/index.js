@@ -6,13 +6,21 @@ const store = createStore({
       currentLocation: {
         lat: 0,
         long: 0
-      }
+      },
+      inputPoints: [],
+      optimalRoute: []
     }
   },
   mutations: {
     setCurrentLocation(state, { lat, long }) {
       state.currentLocation.long = long
       state.currentLocation.lat = lat
+    },
+    setInputPoints(state, points) {
+      state.inputPoints = [...points]
+    },
+    setOptimalRoute(state, route) {
+      state.optimalRoute = [...route]
     }
   },
   actions: {
@@ -28,6 +36,16 @@ const store = createStore({
       } else {
         alert('Geolocation is not supported by this browser.')
       }
+    },
+
+    updateInputPoints({ commit }, points) {
+      commit('setInputPoints', points)
+    },
+    async optimizeRoute({ state, commit }) {
+      // TODO: fetch points to server and receive optimal route
+      const data = state.inputPoints.toSorted((a, b) => a.id - b.id)
+
+      commit('setOptimalRoute', data)
     }
   }
 })
