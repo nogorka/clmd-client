@@ -1,10 +1,13 @@
 <script setup>
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 const store = useStore()
+const router = useRouter()
 
 const onClick = () => {
   store.dispatch('optimizeRoute')
+  router.push({ name: 'map' })
 }
 </script>
 

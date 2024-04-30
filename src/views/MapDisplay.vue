@@ -4,22 +4,21 @@
       <go-back />
       <h1 class="text-center text-2xl font-bold my-4">Map</h1>
     </div>
-    <div class="flex h-full">
-      <div id="map">
-        <div id="route-info" class="route-info">
-          <!-- Route summary will be displayed here -->
-        </div>
+    <div class="flex h-full" v-loading="store.state.loading">
+      <div id="map" >
+<!--        <div id="route-info" class="route-info">-->
+<!--          &lt;!&ndash; Route summary will be displayed here &ndash;&gt;-->
+<!--        </div>-->
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onDeactivated, onMounted, ref } from 'vue'
 import { initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import GoBack from '@/components/go-back.vue'
 
-import tempData from '@/assets/example.json'
 import { useStore } from 'vuex'
 
 const store = useStore()
@@ -28,7 +27,11 @@ store.dispatch('getLocation')
 
 onMounted(() => {
   const map = initializeMap('map')
-  visualizePointsFromJson(tempData, map)
+  // visualizePointsFromJson(store.state.optimalRoute, map)
+})
+
+onDeactivated(() => {
+  store.dispatch('clearRoute')
 })
 </script>
 
@@ -63,7 +66,6 @@ onMounted(() => {
 .leaflet-routing-container .leaflet-routing-alt {
   padding: 10px;
   border: none;
-  background: #f8f9fa;  /* Change the background as needed */
+  background: #f8f9fa; /* Change the background as needed */
 }
-
 </style>
