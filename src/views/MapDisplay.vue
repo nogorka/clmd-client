@@ -4,6 +4,7 @@
       <go-back />
       <h1 class="text-center text-2xl font-bold my-4">Map</h1>
     </div>
+    <map-summary />
     <div class="flex h-full" v-loading="store.state.loading">
       <div id="map" />
     </div>
@@ -13,8 +14,10 @@
 <script setup>
 import { onDeactivated, onMounted, ref, watch } from 'vue'
 import { initializeMap, visualizePointsFromJson } from '@/utils/map.js'
-import GoBack from '@/components/go-back.vue'
 import { useStore } from 'vuex'
+
+import GoBack from '@/components/go-back.vue'
+import MapSummary from '@/components/map-summary.vue'
 
 
 const store = useStore()
@@ -24,7 +27,7 @@ const map = ref(null)
 store.dispatch('getLocation')
 
 watch(
-  () => store.state.optimalRoute,
+  () => store.state.optimalRoute.route,
   (newRoute) => {
     if (newRoute && map.value) {
       visualizePointsFromJson(newRoute, map.value)

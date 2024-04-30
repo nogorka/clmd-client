@@ -1,7 +1,7 @@
 import L from 'leaflet'
 import 'leaflet-routing-machine'
 import 'lrm-graphhopper'
-import 'leaflet.fullscreen';
+import 'leaflet.fullscreen'
 
 // import 'leaflet-control-geocoder'
 import store from '@/store/index.js'
@@ -23,7 +23,7 @@ export const initializeMap = (id) => {
   // const center = lat ? [lat, long] : config.defaultLatLong
   const center = config.defaultLatLong
 
-  const map = L.map(id,{
+  const map = L.map(id, {
     center,
     zoom: config.zoom,
     fullscreenControl: true
@@ -62,26 +62,18 @@ const numberIconMarker = (number) =>
 
 const routing = (map, waypoints) => {
   if (waypoints.length > 1) {
-    L.Routing.control({
+    const control = L.Routing.control({
       waypoints,
       router: new L.Routing.GraphHopper(config.key, {
-        urlParameters: {
-          vehicle: 'car'
-        }
+        urlParameters: { vehicle: 'car' }
       })
     }).addTo(map)
-    //
-    // L.Routing.itinerary({
-    //   collapsible: true,
-    //   show: false
-    // }).addTo(map)
 
-    //   control.on('routesfound', function(e) {
-    //     const { summary } = e.routes[0]
-    //     document.getElementById('route-info').innerHTML = `
-    //   <strong>Distance:</strong> ${(summary.totalDistance / 1000).toFixed(2)} km<br>
-    //   <strong>Estimated Time:</strong> ${Math.round(summary.totalTime / 60)} min
-    // `
-    //   })
+    control.on('routesfound', (e) => {
+        // TODO: dont forget to update when multiple routes will be available
+        const { summary } = e.routes[0]
+        store.dispatch('updateRouteInfo', summary)
+      }
+    )
   }
 }

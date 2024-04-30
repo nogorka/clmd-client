@@ -8,7 +8,12 @@ const store = createStore({
         long: 0
       },
       inputPoints: [],
-      optimalRoute: [],
+      optimalRoute: {
+        route: [],
+        length: 0,
+        time: 0,
+        id: null,
+      },
       loading: false
     }
   },
@@ -21,7 +26,13 @@ const store = createStore({
       state.inputPoints = [...points]
     },
     setOptimalRoute(state, route) {
-      state.optimalRoute = [...route]
+      state.optimalRoute.route = [...route]
+    },
+    setRouteTime(state, time) {
+      state.optimalRoute.time = time
+    },
+    setRouteLength(state, length) {
+      state.optimalRoute.length = length
     }
   },
   actions: {
@@ -54,6 +65,10 @@ const store = createStore({
     },
     clearRoute({ commit }) {
       commit('setOptimalRoute', [])
+    },
+    updateRouteInfo({commit}, summary) {
+      commit('setRouteTime', summary.totalTime )
+      commit('setRouteLength', summary.totalDistance )
     }
   }
 })
