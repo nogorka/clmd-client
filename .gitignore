@@ -29,4 +29,5 @@ coverage
 
 *.tsbuildinfo
 
-src/assets/key.json
+.env
+.env.production

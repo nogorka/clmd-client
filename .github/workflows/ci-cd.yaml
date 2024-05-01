@@ -22,6 +22,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_GRAPH_HOPPER_KEY: ${{ secrets.GRAPH_HOPPER_KEY }}
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1

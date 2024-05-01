@@ -5,7 +5,6 @@ import 'leaflet.fullscreen'
 
 // import 'leaflet-control-geocoder'
 import store from '@/store/index.js'
-import keyJson from '@/assets/key.json'
 
 export const config = {
   zoom: 11,
@@ -14,7 +13,7 @@ export const config = {
   urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   numberedMarkerCSS: 'destination-marker',
   defaultLatLong: [59.9342802, 30.3350986],
-  key: keyJson.key,
+  key: import.meta.env.VITE_GRAPH_HOPPER_KEY,
   car: {
     iconUrl: 'public/car.png',
     iconSize: [30, 30],
