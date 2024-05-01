@@ -39,6 +39,14 @@ const onChange = (e) => {
         accept=".json, .csv"
         @change="onChange"
       />
+      <span>Example:</span>
+      <a href="/example.json" download="ex" class="text-blue-600 visited:text-purple-600">
+        example.json
+      </a>
+      <span>, </span>
+      <a href="/example.csv" download="ex" class="text-blue-600 visited:text-purple-600">
+        example.csv
+      </a>
 
       <optimize-route-button />
     </div>
