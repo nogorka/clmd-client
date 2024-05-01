@@ -2,6 +2,7 @@
 import GoBack from '@/components/go-back.vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
 
+// TODO: check scan qr codes and refactor
 const onDecode = (result) => {
   console.log('Decoded result:', result)
   // You can route or perform actions based on the result here
