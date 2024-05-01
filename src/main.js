@@ -5,6 +5,7 @@ import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store/index.js'
 
+import 'leaflet.fullscreen/Control.FullScreen.css'
 import 'leaflet/dist/leaflet.css'
 import 'primeicons/primeicons.css'
 

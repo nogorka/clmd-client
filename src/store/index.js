@@ -8,7 +8,13 @@ const store = createStore({
         long: 0
       },
       inputPoints: [],
-      optimalRoute: []
+      optimalRoute: {
+        route: [],
+        length: 0,
+        time: 0,
+        id: null
+      },
+      loading: false
     }
   },
   mutations: {
@@ -20,7 +26,13 @@ const store = createStore({
       state.inputPoints = [...points]
     },
     setOptimalRoute(state, route) {
-      state.optimalRoute = [...route]
+      state.optimalRoute.route = [...route]
+    },
+    setRouteTime(state, time) {
+      state.optimalRoute.time = time
+    },
+    setRouteLength(state, length) {
+      state.optimalRoute.length = length
     }
   },
   actions: {
@@ -41,11 +53,24 @@ const store = createStore({
     updateInputPoints({ commit }, points) {
       commit('setInputPoints', points)
     },
+
     async optimizeRoute({ state, commit }) {
+      state.loading = true
       // TODO: fetch points to server and receive optimal route
       const data = state.inputPoints.toSorted((a, b) => a.id - b.id)
-
-      commit('setOptimalRoute', data)
+      setTimeout(() => {
+        commit('setOptimalRoute', data)
+        state.loading = false
+      }, 1000)
+    },
+    clearRoute({ commit }) {
+      commit('setOptimalRoute', [])
+      commit('setRouteTime', 0)
+      commit('setRouteLength', 0)
+    },
+    updateRouteInfo({ commit }, summary) {
+      commit('setRouteTime', summary.totalTime)
+      commit('setRouteLength', summary.totalDistance)
     }
   }
 })

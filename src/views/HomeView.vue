@@ -1,5 +1,7 @@
 <script setup>
 import ComplexButton from '@/components/complex-button.vue'
+
+// TODO: dont forget to add capacity constraint
 </script>
 
 <template>
