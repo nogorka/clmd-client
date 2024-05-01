@@ -28,7 +28,7 @@ jobs:
 
 
       - name: Check env var
-        run: echo "GraphHopper Key is $VITE_GRAPH_HOPPER_KEY"
+        run: echo "GraphHopper Key is $VITE_GRAPH_HOPPER_KEY ${{secrets.GRAPH_HOPPER_KEY}}"
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1
@@ -43,8 +43,3 @@ jobs:
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
           personal-access-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: built-files
-          path: dist/
