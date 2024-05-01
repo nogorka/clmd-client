@@ -20,15 +20,26 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-
       - name: Build
         run: npm run build
         env:
           VITE_GRAPH_HOPPER_KEY: ${{ secrets.GRAPH_HOPPER_KEY }}
 
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: ./dist
 
-      - name: Check env var
-        run: echo "GraphHopper Key is $VITE_GRAPH_HOPPER_KEY ${{secrets.GRAPH_HOPPER_KEY}}"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: dist
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1
@@ -42,4 +53,3 @@ jobs:
           overwrites-pull-request-comment: true
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
           personal-access-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-
