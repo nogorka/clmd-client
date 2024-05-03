@@ -64,13 +64,27 @@ const numberIconMarker = (number) =>
     html: number
   })
 
+const router = (key) => new L.Routing.GraphHopper(key, {
+  urlParameters: { vehicle: 'car' }
+})
+
+const lineStyles = () => {
+  const hue = Math.floor(Math.random() * 361)
+  return [
+    { color: 'black', opacity: 0.15, weight: 9 },
+    { color: 'white', opacity: 0.8, weight: 6 },
+    { color: `hsl(${hue}, 100%, 50%)`, opacity: 1, weight: 2 }
+  ]
+}
+
 const routing = (map, waypoints) => {
   if (waypoints.length > 1) {
     const control = L.Routing.control({
       waypoints,
-      router: new L.Routing.GraphHopper(config.key, {
-        urlParameters: { vehicle: 'car' }
-      })
+      router: router(config.key),
+      lineOptions: {
+        styles: lineStyles()
+      }
     }).addTo(map)
 
     control.on('routesfound', (e) => {
