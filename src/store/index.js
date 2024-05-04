@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import api from '@/http/helper.js'
 
 const store = createStore({
   state() {
@@ -33,6 +34,9 @@ const store = createStore({
     },
     setRouteLength(state, length) {
       state.optimalRoute.length = length
+    },
+    setRouteId(state, id) {
+      state.optimalRoute.id = id
     }
   },
   actions: {
@@ -57,11 +61,16 @@ const store = createStore({
     async optimizeRoute({ state, commit }) {
       state.loading = true
       // TODO: fetch points to server and receive optimal route
-      const data = state.inputPoints.toSorted((a, b) => a.id - b.id)
-      setTimeout(() => {
-        commit('setOptimalRoute', data)
+      const response = await api.optimizeRoute(state.inputPoints)
+
+      if (response.success) {
+        commit('setOptimalRoute', response.data._id)
+        commit('setOptimalRoute', JSON.parse(response.data.route))
         state.loading = false
-      }, 1000)
+      } else {
+        // TODO: show user a notification with error
+        state.loading = false
+      }
     },
     clearRoute({ commit }) {
       commit('setOptimalRoute', [])
