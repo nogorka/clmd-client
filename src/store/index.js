@@ -14,6 +14,9 @@ const store = createStore({
         length: 0,
         time: 0,
         id: null
+      },
+      mapSettings: {
+        colors: []
       }
     }
   },
@@ -36,6 +39,9 @@ const store = createStore({
     },
     setRouteId(state, id) {
       state.optimalRoute.id = id
+    },
+    setColors(state, colors) {
+      state.mapSettings.colors = colors
     }
   },
   actions: {
@@ -69,11 +75,12 @@ const store = createStore({
         return response.data?._id || null
       }
     },
-    updateRouteData({ commit }, payload) {
+    updateRouteData({ commit, dispatch }, payload) {
       if (payload.success) {
         const { _id, route, datetime } = payload.data
         commit('setOptimalRoute', _id)
         commit('setOptimalRoute', JSON.parse(route))
+        dispatch('generateColors')
         return _id
       } else {
         return null
@@ -88,6 +95,18 @@ const store = createStore({
     updateRouteMeta({ commit }, summary) {
       commit('setRouteTime', summary.totalTime)
       commit('setRouteLength', summary.totalDistance)
+    },
+
+    generateColors: ({ state, commit }) => {
+      const amount = state.optimalRoute.route.length
+      const diff = 360 / amount
+      const hueList = []
+
+      for (let i = 0; i < amount; i++) {
+        hueList.push(i * diff)
+      }
+
+      commit('setColors', hueList)
     }
   }
 })

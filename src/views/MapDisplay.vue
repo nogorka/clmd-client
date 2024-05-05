@@ -44,8 +44,8 @@ watch(
   () => store.state.optimalRoute.route,
   (newRoute) => {
     if (newRoute && map.value) {
-      for (const route of newRoute) {
-        visualizePointsFromJson(route, map.value)
+      for (const index in newRoute) {
+        visualizePointsFromJson(newRoute[index], map.value, index)
       }
     }
   },

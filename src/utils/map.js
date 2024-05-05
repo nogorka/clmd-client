@@ -41,10 +41,10 @@ export const initializeMap = (id) => {
 }
 
 // Visualize points from JSON data
-export const visualizePointsFromJson = (jsonData, map) => {
+export const visualizePointsFromJson = (jsonData, map, index) => {
   const waypoints = []
   jsonData?.forEach((entry, index) => processJsonEntry(entry, index, map, waypoints))
-  routing(map, waypoints)
+  routing(map, waypoints, index)
 }
 
 // Process each entry from the JSON data
@@ -68,22 +68,21 @@ const router = (key) => new L.Routing.GraphHopper(key, {
   urlParameters: { vehicle: 'car' }
 })
 
-const lineStyles = () => {
-  const hue = Math.floor(Math.random() * 361)
+const lineStyles = (index) => {
   return [
     { color: 'black', opacity: 0.15, weight: 9 },
     { color: 'white', opacity: 0.8, weight: 6 },
-    { color: `hsl(${hue}, 100%, 50%)`, opacity: 1, weight: 2 }
+    { color: `hsl(${store.state.mapSettings.colors[index]}, 100%, 50%)`, opacity: 1, weight: 2 }
   ]
 }
 
-const routing = (map, waypoints) => {
+const routing = (map, waypoints, index) => {
   if (waypoints.length > 1) {
     const control = L.Routing.control({
       waypoints,
       router: router(config.key),
       lineOptions: {
-        styles: lineStyles()
+        styles: lineStyles(index)
       }
     }).addTo(map)
 
