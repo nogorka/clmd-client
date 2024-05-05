@@ -4,7 +4,13 @@
       <go-back />
       <h1 class="text-center text-2xl font-bold my-4">Map</h1>
     </div>
+
+    <button class="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg"
+            @click="changeMapSummaryVisibility(true)">
+      <i class="pi pi-wrench" />
+    </button>
     <map-summary />
+
     <div class="flex h-full">
       <div id="map" />
     </div>
@@ -12,7 +18,7 @@
 </template>
 
 <script setup>
-import { onDeactivated, onMounted, ref, watch } from 'vue'
+import { onDeactivated, onMounted, provide, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 
@@ -24,6 +30,13 @@ const store = useStore()
 const route = useRoute()
 const map = ref(null)
 const currentLocationMarker = ref(null)
+const mapSummaryVisible = ref(false)
+
+provide('mapSummaryVisible', mapSummaryVisible)
+
+const changeMapSummaryVisibility = (value) => {
+  mapSummaryVisible.value = value
+}
 
 store.dispatch('getLocation')
 

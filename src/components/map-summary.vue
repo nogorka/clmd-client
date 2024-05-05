@@ -1,8 +1,9 @@
 <script setup>
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 
 const store = useStore()
+const mapSummaryVisible = inject('mapSummaryVisible')
 
 const distance = computed(() => (store.state.optimalRoute.length / 1000).toFixed(2))
 
@@ -14,6 +15,12 @@ const mins = computed(() => {
 </script>
 
 <template>
-  <strong>Distance:</strong> {{ distance }} km<br />
-  <strong>Estimated Time:</strong> {{ hours }} h {{ mins }} min
+  <el-drawer v-model="mapSummaryVisible" direction="btt">
+    <p>Select routes:</p>
+    <li v-for="route in store.state.optimalRoute.route">
+      Route with size of {{ route.length }}
+    </li>
+    <strong>Distance:</strong> {{ distance }} km<br />
+    <strong>Estimated Time:</strong> {{ hours }} h {{ mins }} min
+  </el-drawer>
 </template>
