@@ -1,8 +1,9 @@
 <script setup>
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { ElLoading, ElMessage } from 'element-plus'
+import { ElLoading } from 'element-plus'
 import { ref } from 'vue'
+import { UiMessage } from '@/utils/message-helper.js'
 
 const store = useStore()
 const router = useRouter()
@@ -19,18 +20,10 @@ const onClick = async () => {
       loading.value.close()
       router.push({ name: 'map', params: { id } })
     } else {
-      ElMessage({
-        message: 'Error, try again',
-        type: 'error',
-        plain: true
-      })
+      UiMessage.error('Error, try again')
     }
   } else {
-    ElMessage({
-      message: 'There\'s no input points',
-      type: 'warning',
-      plain: true
-    })
+    UiMessage.error('There\'s no input points')
   }
 }
 </script>
