@@ -11,14 +11,13 @@ const store = createStore({
       inputPoints: [],
       optimalRoute: {
         route: [],
-        length: 0,
-        time: 0,
         id: null
       },
       mapSettings: {
         colors: [],
         visibility: []
-      }
+      },
+      summary: []
     }
   },
   mutations: {
@@ -32,11 +31,11 @@ const store = createStore({
     setOptimalRoute(state, route) {
       state.optimalRoute.route = [...route]
     },
-    setRouteTime(state, time) {
-      state.optimalRoute.time = time
+    setSummaryList(state, list) {
+      state.summary = [...list]
     },
-    setRouteLength(state, length) {
-      state.optimalRoute.length = length
+    addSummary(state, summary) {
+      state.summary.push(summary)
     },
     setRouteId(state, id) {
       state.optimalRoute.id = id
@@ -95,14 +94,11 @@ const store = createStore({
     },
     clearOptimalRoute({ commit }) {
       commit('setOptimalRoute', [])
-      commit('setRouteTime', 0)
-      commit('setRouteLength', 0)
       commit('setRouteId', null)
+      commit('setSummaryList', [])
     },
     updateRouteMeta({ commit }, summary) {
-      const { totalTime, totalDistance, index } = summary
-      // commit('setRouteTime', summary.totalTime)
-      // commit('setRouteLength', summary.totalDistance)
+      commit('addSummary', summary)
     },
 
     generateColors: ({ state, commit }) => {
@@ -134,6 +130,7 @@ const store = createStore({
         ({
           hue: state.mapSettings.colors[index],
           visibility: state.mapSettings.visibility[index],
+          summary: state.summary.find(summary => summary.index === index),
           route,
           index
         })
