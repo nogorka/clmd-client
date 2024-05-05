@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import api from '@/http/helper.js'
 
 const store = createStore({
   state() {
@@ -10,11 +11,13 @@ const store = createStore({
       inputPoints: [],
       optimalRoute: {
         route: [],
-        length: 0,
-        time: 0,
         id: null
       },
-      loading: false
+      mapSettings: {
+        colors: [],
+        visibility: []
+      },
+      summary: []
     }
   },
   mutations: {
@@ -28,11 +31,20 @@ const store = createStore({
     setOptimalRoute(state, route) {
       state.optimalRoute.route = [...route]
     },
-    setRouteTime(state, time) {
-      state.optimalRoute.time = time
+    setSummaryList(state, list) {
+      state.summary = [...list]
     },
-    setRouteLength(state, length) {
-      state.optimalRoute.length = length
+    addSummary(state, summary) {
+      state.summary.push(summary)
+    },
+    setRouteId(state, id) {
+      state.optimalRoute.id = id
+    },
+    setColors(state, colors) {
+      state.mapSettings.colors = [...colors]
+    },
+    setRouteVisibility(state, list) {
+      state.mapSettings.visibility = [...list]
     }
   },
   actions: {
@@ -54,24 +66,75 @@ const store = createStore({
       commit('setInputPoints', points)
     },
 
-    async optimizeRoute({ state, commit }) {
-      state.loading = true
-      // TODO: fetch points to server and receive optimal route
-      const data = state.inputPoints.toSorted((a, b) => a.id - b.id)
-      setTimeout(() => {
-        commit('setOptimalRoute', data)
-        state.loading = false
-      }, 1000)
+
+    async getOptimalRoute({ dispatch }, { id }) {
+      const response = await api.getOptimalRoute(id)
+      dispatch('updateRouteData', response)
     },
-    clearRoute({ commit }) {
+    async optimizeRoute({ state, dispatch }) {
+      if (state.inputPoints.length > 0) {
+        const response = await api.optimizeRoute(state.inputPoints)
+        dispatch('updateRouteData', response)
+        return response.data?._id || null
+      }
+    },
+    updateRouteData({ commit, dispatch }, payload) {
+      if (payload.success) {
+        const { _id, route, datetime } = payload.data
+        commit('setOptimalRoute', _id)
+        commit('setOptimalRoute', JSON.parse(route))
+        dispatch('generateColors')
+
+        const visibilityList = new Array(JSON.parse(route).length).fill(true)
+        commit('setRouteVisibility', visibilityList)
+        return _id
+      } else {
+        return null
+      }
+    },
+    clearOptimalRoute({ commit }) {
       commit('setOptimalRoute', [])
-      commit('setRouteTime', 0)
-      commit('setRouteLength', 0)
+      commit('setRouteId', null)
+      commit('setSummaryList', [])
     },
-    updateRouteInfo({ commit }, summary) {
-      commit('setRouteTime', summary.totalTime)
-      commit('setRouteLength', summary.totalDistance)
+    updateRouteMeta({ commit }, summary) {
+      commit('addSummary', summary)
+    },
+
+    generateColors: ({ state, commit }) => {
+      const amount = state.optimalRoute.route.length
+      const diff = 360 / amount
+      const hueList = []
+
+      for (let i = 0; i < amount; i++) {
+        hueList.push(i * diff)
+      }
+
+      commit('setColors', hueList)
+    },
+    clearMapSetting({ commit }) {
+      commit('setColors', [])
+      commit('setRouteVisibility', [])
+    },
+    updateRouteVisibility({ state, commit }, { index, newValue }) {
+      const visibility = state.mapSettings.visibility.map((value, idx) => {
+        return index === idx ? newValue : value
+      })
+      commit('setRouteVisibility', visibility)
     }
+
+  },
+  getters: {
+    getRouteMetaData: (state) =>
+      state.optimalRoute.route.map((route, index) =>
+        ({
+          hue: state.mapSettings.colors[index],
+          visibility: state.mapSettings.visibility[index],
+          summary: state.summary.find(summary => summary.index === index),
+          route,
+          index
+        })
+      )
   }
 })
 

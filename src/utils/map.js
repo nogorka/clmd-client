@@ -41,21 +41,17 @@ export const initializeMap = (id) => {
 }
 
 // Visualize points from JSON data
-export const visualizePointsFromJson = (jsonData, map) => {
-  const waypoints = []
-  jsonData?.forEach((entry, index) => processJsonEntry(entry, index, map, waypoints))
-  routing(map, waypoints)
-}
+export const visualizePointsFromJson = (jsonData, map, _index) => {
+  const markers = []
+  const waypoints = jsonData?.map((entry, index) => {
+    const { lat, long } = entry
+    const marker = L.marker([lat, long], { icon: numberIconMarker(index + 1) }).addTo(map)
+    markers.push(marker)
+    return L.latLng(lat, long)
+  })
 
-// Process each entry from the JSON data
-const processJsonEntry = (entry, index, map, waypoints) => {
-  const { lat, long } = entry
-
-  waypoints.push(L.latLng(lat, long))
-
-  const numberMarker = numberIconMarker(index + 1)
-  L.marker([lat, long], { icon: numberMarker }).addTo(map)
-  L.marker([lat, long]).addTo(map)
+  const control = routing(map, waypoints, Number(_index))
+  return { control, markers }
 }
 
 const numberIconMarker = (number) =>
@@ -64,19 +60,47 @@ const numberIconMarker = (number) =>
     html: number
   })
 
-const routing = (map, waypoints) => {
+const router = (key) => new L.Routing.GraphHopper(key, {
+  urlParameters: { vehicle: 'car' }
+})
+
+const lineStyles = (index) => {
+  return [
+    { color: 'black', opacity: 0.15, weight: 9 },
+    { color: 'white', opacity: 0.8, weight: 6 },
+    { color: `hsl(${store.state.mapSettings.colors[index]}, 100%, 50%)`, opacity: 1, weight: 2 }
+  ]
+}
+
+const routing = (map, waypoints, index) => {
   if (waypoints.length > 1) {
     const control = L.Routing.control({
       waypoints,
-      router: new L.Routing.GraphHopper(config.key, {
-        urlParameters: { vehicle: 'car' }
-      })
+      router: router(config.key),
+      lineOptions: {
+        styles: lineStyles(index)
+      }
     }).addTo(map)
 
     control.on('routesfound', (e) => {
-      // TODO: dont forget to update when multiple routes will be available
       const { summary } = e.routes[0]
-      store.dispatch('updateRouteInfo', summary)
+      summary.index = index
+      store.dispatch('updateRouteMeta', summary)
     })
+    return control
   }
+}
+
+export const clearMap = (map, controls, markers) => {
+  controls.forEach(control => {
+    map.removeControl(control)
+  })
+  markers.forEach((marker) => {
+    map.removeLayer(marker)
+  })
+  map.eachLayer((layer) => {
+    if (layer.options.waypoints) {
+      map.removeLayer(layer)
+    }
+  })
 }

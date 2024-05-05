@@ -30,7 +30,7 @@ const router = createRouter({
       component: ScanQr
     },
     {
-      path: '/map',
+      path: '/map/:id',
       name: 'map',
       component: MapDisplay
     },
