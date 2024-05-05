@@ -41,28 +41,30 @@ onMounted(() => {
   map.value = initializeMap('map')
 
   if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords
-        const newLocation = L.latLng(latitude, longitude)
-        if (!currentLocationMarker.value) {
-          currentLocationMarker.value = L.marker(newLocation, {
-            icon: L.icon(config.car)
-          }).addTo(map.value)
-        } else {
-          currentLocationMarker.value.setLatLng(newLocation)
-        }
-        map.value.panTo(newLocation)
-      },
-      (error) => {
-        console.error(error)
-      },
-      {
-        enableHighAccuracy: true
-      }
-    )
+    watchUserGeolocation()
   }
 })
+
+const watchUserGeolocation = () => navigator.geolocation.watchPosition(
+  (position) => {
+    const { latitude, longitude } = position.coords
+    const newLocation = L.latLng(latitude, longitude)
+    if (!currentLocationMarker.value) {
+      currentLocationMarker.value = L.marker(newLocation, {
+        icon: L.icon(config.car)
+      }).addTo(map.value)
+    } else {
+      currentLocationMarker.value.setLatLng(newLocation)
+    }
+    map.value.panTo(newLocation)
+  },
+  (error) => {
+    console.error(error)
+  },
+  {
+    enableHighAccuracy: true
+  }
+)
 
 onDeactivated(() => {
   store.dispatch('clearOptimalRoute')
