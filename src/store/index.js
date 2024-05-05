@@ -14,8 +14,7 @@ const store = createStore({
         length: 0,
         time: 0,
         id: null
-      },
-      loading: false
+      }
     }
   },
   mutations: {
@@ -58,26 +57,35 @@ const store = createStore({
       commit('setInputPoints', points)
     },
 
-    async optimizeRoute({ state, commit }) {
-      state.loading = true
-      // TODO: fetch points to server and receive optimal route
-      const response = await api.optimizeRoute(state.inputPoints)
 
-      if (response.success) {
-        commit('setOptimalRoute', response.data._id)
-        commit('setOptimalRoute', JSON.parse(response.data.route))
-        state.loading = false
-      } else {
-        // TODO: show user a notification with error
-        state.loading = false
+    async getOptimalRoute({ dispatch }, { id }) {
+      const response = await api.getOptimalRoute(id)
+      dispatch('updateRouteData', response)
+    },
+    async optimizeRoute({ state, dispatch }) {
+      if (state.inputPoints.length > 0) {
+        const response = await api.optimizeRoute(state.inputPoints)
+        dispatch('updateRouteData', response)
+        return response.data?._id || null
       }
     },
-    clearRoute({ commit }) {
+    updateRouteData({ commit }, payload) {
+      if (payload.success) {
+        const { _id, route, datetime } = payload.data
+        commit('setOptimalRoute', _id)
+        commit('setOptimalRoute', JSON.parse(route))
+        return _id
+      } else {
+        return null
+      }
+    },
+    clearOptimalRoute({ commit }) {
       commit('setOptimalRoute', [])
       commit('setRouteTime', 0)
       commit('setRouteLength', 0)
+      commit('setRouteId', null)
     },
-    updateRouteInfo({ commit }, summary) {
+    updateRouteMeta({ commit }, summary) {
       commit('setRouteTime', summary.totalTime)
       commit('setRouteLength', summary.totalDistance)
     }

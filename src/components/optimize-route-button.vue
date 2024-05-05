@@ -1,13 +1,37 @@
 <script setup>
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { ElLoading, ElMessage } from 'element-plus'
+import { ref } from 'vue'
 
 const store = useStore()
 const router = useRouter()
+const loading = ref(null)
 
-const onClick = () => {
-  store.dispatch('optimizeRoute')
-  router.push({ name: 'map' })
+const onClick = async () => {
+  if (store.state.inputPoints.length > 0) {
+    loading.value = ElLoading.service({
+      lock: true,
+      text: 'Optimizing your route...'
+    })
+    const id = await store.dispatch('optimizeRoute')
+    if (id) {
+      loading.value.close()
+      router.push({ name: 'map', params: { id } })
+    } else {
+      ElMessage({
+        message: 'Error, try again',
+        type: 'error',
+        plain: true
+      })
+    }
+  } else {
+    ElMessage({
+      message: 'There\'s no input points',
+      type: 'warning',
+      plain: true
+    })
+  }
 }
 </script>
 

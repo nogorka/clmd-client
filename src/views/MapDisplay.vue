@@ -5,7 +5,7 @@
       <h1 class="text-center text-2xl font-bold my-4">Map</h1>
     </div>
     <map-summary />
-    <div class="flex h-full" v-loading="store.state.loading">
+    <div class="flex h-full">
       <div id="map" />
     </div>
   </div>
@@ -13,13 +13,15 @@
 
 <script setup>
 import { onDeactivated, onMounted, ref, watch } from 'vue'
-import { config, initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 
+import { config, initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import GoBack from '@/components/go-back.vue'
 import MapSummary from '@/components/map-summary.vue'
 
 const store = useStore()
+const route = useRoute()
 const map = ref(null)
 const currentLocationMarker = ref(null)
 
@@ -38,6 +40,9 @@ watch(
 )
 
 onMounted(() => {
+  if (!store.state.optimalRoute.route.id && route.params.id) {
+    store.dispatch('getOptimalRoute', { id: route.params.id })
+  }
   map.value = initializeMap('map')
 
   if (navigator.geolocation) {

@@ -90,7 +90,7 @@ const routing = (map, waypoints) => {
     control.on('routesfound', (e) => {
       // TODO: dont forget to update when multiple routes will be available
       const { summary } = e.routes[0]
-      store.dispatch('updateRouteInfo', summary)
+      store.dispatch('updateRouteMeta', summary)
     })
   }
 }
