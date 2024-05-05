@@ -22,7 +22,7 @@ import { onDeactivated, onMounted, provide, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 
-import { config, initializeMap, visualizePointsFromJson } from '@/utils/map.js'
+import { clearMap, config, initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import GoBack from '@/components/go-back.vue'
 import MapSummary from '@/components/map-summary.vue'
 
@@ -41,11 +41,15 @@ const changeMapSummaryVisibility = (value) => {
 store.dispatch('getLocation')
 
 watch(
-  () => store.state.optimalRoute.route,
-  (newRoute) => {
-    if (newRoute && map.value) {
-      for (const index in newRoute) {
-        visualizePointsFromJson(newRoute[index], map.value, index)
+  () => store.state.mapSettings.visibility,
+  (visibility) => {
+
+    if (visibility && map.value) {
+      clearMap(map.value)
+      for (const index in visibility) {
+        if (store.state.mapSettings.visibility[index]) {
+          visualizePointsFromJson(store.state.optimalRoute.route[index], map.value, Number(index))
+        }
       }
     }
   },
@@ -86,6 +90,7 @@ const watchUserGeolocation = () => navigator.geolocation.watchPosition(
 
 onDeactivated(() => {
   store.dispatch('clearOptimalRoute')
+  store.dispatch('clearMapSetting')
 })
 </script>
 

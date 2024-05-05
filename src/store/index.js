@@ -16,7 +16,8 @@ const store = createStore({
         id: null
       },
       mapSettings: {
-        colors: []
+        colors: [],
+        visibility: []
       }
     }
   },
@@ -41,7 +42,10 @@ const store = createStore({
       state.optimalRoute.id = id
     },
     setColors(state, colors) {
-      state.mapSettings.colors = colors
+      state.mapSettings.colors = [...colors]
+    },
+    setRouteVisibility(state, list) {
+      state.mapSettings.visibility = [...list]
     }
   },
   actions: {
@@ -81,6 +85,9 @@ const store = createStore({
         commit('setOptimalRoute', _id)
         commit('setOptimalRoute', JSON.parse(route))
         dispatch('generateColors')
+
+        const visibilityList = new Array(JSON.parse(route).length).fill(true)
+        commit('setRouteVisibility', visibilityList)
         return _id
       } else {
         return null
@@ -93,8 +100,9 @@ const store = createStore({
       commit('setRouteId', null)
     },
     updateRouteMeta({ commit }, summary) {
-      commit('setRouteTime', summary.totalTime)
-      commit('setRouteLength', summary.totalDistance)
+      const { totalTime, totalDistance, index } = summary
+      // commit('setRouteTime', summary.totalTime)
+      // commit('setRouteLength', summary.totalDistance)
     },
 
     generateColors: ({ state, commit }) => {
@@ -107,7 +115,29 @@ const store = createStore({
       }
 
       commit('setColors', hueList)
+    },
+    clearMapSetting({ commit }) {
+      commit('setColors', [])
+      commit('setRouteVisibility', [])
+    },
+    updateRouteVisibility({ state, commit }, { index, newValue }) {
+      const visibility = state.mapSettings.visibility.map((value, idx) => {
+        return index === idx ? newValue : value
+      })
+      commit('setRouteVisibility', visibility)
     }
+
+  },
+  getters: {
+    getRouteMetaData: (state) =>
+      state.optimalRoute.route.map((route, index) =>
+        ({
+          hue: state.mapSettings.colors[index],
+          visibility: state.mapSettings.visibility[index],
+          route,
+          index
+        })
+      )
   }
 })
 
