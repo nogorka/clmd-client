@@ -23,9 +23,31 @@ const post = async (endpoint, body) => {
   }
 }
 
+const get = async (endpoint, paramsObj) => {
+  const params = new URLSearchParams(paramsObj)
+  const url = new URL(endpoint, get_base_url())
+  url.search = params.toString();
+
+  const data = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (data.status === 200) {
+    const result = await data.json()
+    return { 'success': true, data: result }
+  } else {
+    return { 'success': false }
+  }
+}
+
 const api = {
   optimizeRoute: async (body) =>
-    await post('optimize', body)
+    await post('optimize', body),
+  getOptimalRoute: async (id) =>
+    await get('route', { id })
 }
 
 export default api
