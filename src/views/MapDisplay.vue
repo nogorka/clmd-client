@@ -40,15 +40,20 @@ const changeMapSummaryVisibility = (value) => {
 
 store.dispatch('getLocation')
 
+const routeControls = ref([])
+const markersAll = ref([])
 watch(
   () => store.state.mapSettings.visibility,
   (visibility) => {
 
     if (visibility && map.value) {
-      clearMap(map.value)
+      clearMap(map.value, routeControls.value, markersAll.value)
+
       for (const index in visibility) {
         if (store.state.mapSettings.visibility[index]) {
-          visualizePointsFromJson(store.state.optimalRoute.route[index], map.value, Number(index))
+          const { control, markers } = visualizePointsFromJson(store.state.optimalRoute.route[index], map.value, index)
+          routeControls.value.push(control)
+          markersAll.value.push(...markers)
         }
       }
     }

@@ -21,11 +21,6 @@ export const config = {
   }
 }
 
-const mapLayers = {
-  markers: [],
-  routes: []
-}
-
 export const initializeMap = (id) => {
   // TODO: replace with current GPS coords
   const { lat, long } = store.state.currentLocation
@@ -47,27 +42,16 @@ export const initializeMap = (id) => {
 
 // Visualize points from JSON data
 export const visualizePointsFromJson = (jsonData, map, _index) => {
-  const waypoints = []
-  const amount = jsonData?.length
-  jsonData?.forEach((entry, index) => processJsonEntry(entry, index, map, waypoints, _index, amount))
-  routing(map, waypoints, _index)
-}
+  const markers = []
+  const waypoints = jsonData?.map((entry, index) => {
+    const { lat, long } = entry
+    const marker = L.marker([lat, long], { icon: numberIconMarker(index + 1) }).addTo(map)
+    markers.push(marker)
+    return L.latLng(lat, long)
+  })
 
-// Process each entry from the JSON data
-const processJsonEntry = (entry, index, map, waypoints, globalIndex, amount) => {
-  const { lat, long } = entry
-
-  waypoints.push(L.latLng(lat, long))
-
-  if ((index === 0 || index === amount - 1) && globalIndex !== 0) {
-    return
-  }
-
-  const numberMarker = numberIconMarker(index + 1)
-  const marker1 = L.marker([lat, long], { icon: numberMarker }).addTo(map)
-  const marker2 = L.marker([lat, long]).addTo(map)
-  mapLayers.markers.push(marker1)
-  mapLayers.markers.push(marker2)
+  const control = routing(map, waypoints, Number(_index))
+  return { control, markers }
 }
 
 const numberIconMarker = (number) =>
@@ -104,31 +88,20 @@ const routing = (map, waypoints, index) => {
       summary.index = index
       store.dispatch('updateRouteMeta', summary)
     })
-
-    mapLayers.routes.push(control)
+    return control
   }
 }
 
-export const clearMap = (map) => {
-
-  mapLayers.markers.forEach(marker => {
-    // if (map.hasLayer(marker)) {
-    marker.remove()
-    // }
+export const clearMap = (map, controls, markers) => {
+  controls.forEach(control => {
+    map.removeControl(control)
   })
-  mapLayers.markers = []
-
-  mapLayers.routes.forEach(routeControl => {
-    // if (routeControl && map.hasLayer(routeControl)) {
-    //   routeControl.off('routesfound')
-    //   routeControl.getPlan().setWaypoints([]) // Clear waypoints
-    //   routeControl.removeFrom(map) // Remove the control from the map
-    routeControl.remove()
-    // }
-
-
+  markers.forEach((marker) => {
+    map.removeLayer(marker)
   })
-  mapLayers.routes = []
-
-  console.log(mapLayers)
+  map.eachLayer((layer) => {
+    if (layer.options.waypoints) {
+      map.removeLayer(layer)
+    }
+  })
 }
