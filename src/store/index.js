@@ -80,12 +80,17 @@ const store = createStore({
     },
     updateRouteData({ commit, dispatch }, payload) {
       if (payload.success) {
-        const { _id, route, datetime } = payload.data
+        const { _id, route, date } = payload.data
+        const decodedRoute = JSON.parse(route)
+        // const decodedRoute = route.map(r =>
+        //   r.map(point => JSON.parse(point))
+        // )
+
         commit('setOptimalRoute', _id)
-        commit('setOptimalRoute', JSON.parse(route))
+        commit('setOptimalRoute', decodedRoute)
         dispatch('generateColors')
 
-        const visibilityList = new Array(JSON.parse(route).length).fill(true)
+        const visibilityList = new Array(decodedRoute.length).fill(true)
         commit('setRouteVisibility', visibilityList)
         return _id
       } else {
