@@ -60,9 +60,9 @@ const numberIconMarker = (number) =>
     html: number
   })
 
-const router = (key) => new L.Routing.GraphHopper(key, {
-  urlParameters: { vehicle: 'car' }
-})
+// const router = (key) => new L.Routing.GraphHopper(key, {
+//   urlParameters: { vehicle: 'car' }
+// })
 
 const lineStyles = (index) => {
   return [
@@ -76,7 +76,7 @@ const routing = (map, waypoints, index) => {
   if (waypoints.length > 1) {
     const control = L.Routing.control({
       waypoints,
-      router: router(config.key),
+      // router: router(config.key),
       lineOptions: {
         styles: lineStyles(index)
       }
