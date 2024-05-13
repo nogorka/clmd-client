@@ -1,7 +1,7 @@
 const get_base_url = () => {
   let protocol = 'https'
   if (import.meta.env.DEV) protocol = 'http'
-
+  console.log(import.meta.env)
   return `${protocol}://${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}/`
 }
 
