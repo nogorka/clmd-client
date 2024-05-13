@@ -20,6 +20,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Verify environment variables before build
+        run: |
+          echo "VITE_APP_HOST is ${{ secrets.VITE_APP_HOST }}"
+          echo "VITE_APP_PORT is ${{ secrets.VITE_APP_PORT }}"
+      
       - name: Build
         run: npm run build
         env:
