@@ -7,17 +7,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { config } from '@/utils/map.js'
 import RoundButton from '@/components/round-button.vue'
 
-const props = defineProps({
-  map: {
-    type: Object || null,
-    required: true,
-    default: () => { }
-  }
-})
+const map = inject('map')
 
 const currentLocationMarker = ref(null)
 const watchingGeolocation = ref(false)
@@ -31,11 +25,11 @@ const watchUserGeolocation = () => {
       if (!currentLocationMarker.value) {
         currentLocationMarker.value = L.marker(newLocation, {
           icon: L.icon(config.car)
-        }).addTo(props.map)
+        }).addTo(map.value)
       } else {
         currentLocationMarker.value.setLatLng(newLocation)
       }
-      props.map.panTo(newLocation)
+      map.value.panTo(newLocation)
     },
     (error) => {
       console.error(error)
@@ -49,7 +43,7 @@ const watchUserGeolocation = () => {
 const toggleGeolocation = () => {
   if (watchingGeolocation.value) {
     navigator.geolocation.clearWatch(watchId)
-    currentLocationMarker.value && props.map.removeLayer(currentLocationMarker.value)
+    currentLocationMarker.value && map.value.removeLayer(currentLocationMarker.value)
     currentLocationMarker.value = null
     watchingGeolocation.value = false
   } else {

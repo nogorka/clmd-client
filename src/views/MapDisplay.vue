@@ -11,7 +11,7 @@
     />
     <map-summary />
 
-    <geolocation-button :map="map" />
+    <geolocation-button />
 
     <div class="flex h-full">
       <div id="map" />
@@ -35,7 +35,7 @@ const route = useRoute()
 
 const map = ref(null)
 const mapSummaryVisible = ref(false)
-
+provide('map', map)
 
 provide('mapSummaryVisible', mapSummaryVisible)
 
