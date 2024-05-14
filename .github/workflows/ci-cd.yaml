@@ -22,8 +22,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          VITE_GRAPH_HOPPER_KEY: ${{ secrets.GRAPH_HOPPER_KEY }}
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
