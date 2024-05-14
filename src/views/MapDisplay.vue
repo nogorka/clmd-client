@@ -11,6 +11,8 @@
     </button>
     <map-summary />
 
+    <geolocation-button :map="map" />
+
     <div class="flex h-full">
       <div id="map" />
     </div>
@@ -22,14 +24,14 @@ import { onDeactivated, onMounted, provide, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 
-import { clearMap, config, initializeMap, visualizePointsFromJson } from '@/utils/map.js'
+import { clearMap, initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import GoBack from '@/components/go-back.vue'
 import MapSummary from '@/components/map-summary.vue'
+import GeolocationButton from '@/components/geolocation-button.vue'
 
 const store = useStore()
 const route = useRoute()
 const map = ref(null)
-const currentLocationMarker = ref(null)
 const mapSummaryVisible = ref(false)
 
 provide('mapSummaryVisible', mapSummaryVisible)
@@ -66,32 +68,7 @@ onMounted(() => {
     store.dispatch('getOptimalRoute', { id: route.params.id })
   }
   map.value = initializeMap('map')
-
-  if (navigator.geolocation) {
-    watchUserGeolocation()
-  }
 })
-
-const watchUserGeolocation = () => navigator.geolocation.watchPosition(
-  (position) => {
-    const { latitude, longitude } = position.coords
-    const newLocation = L.latLng(latitude, longitude)
-    if (!currentLocationMarker.value) {
-      currentLocationMarker.value = L.marker(newLocation, {
-        icon: L.icon(config.car)
-      }).addTo(map.value)
-    } else {
-      currentLocationMarker.value.setLatLng(newLocation)
-    }
-    map.value.panTo(newLocation)
-  },
-  (error) => {
-    console.error(error)
-  },
-  {
-    enableHighAccuracy: true
-  }
-)
 
 onDeactivated(() => {
   store.dispatch('clearOptimalRoute')
