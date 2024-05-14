@@ -2,12 +2,11 @@
   <div class="container mx-auto p-4 w-full h-full">
     <div class="flex flex-col">
       <go-back />
-      <h1 class="text-center text-2xl font-bold my-4">Map</h1>
     </div>
 
-    <button class="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg"
+    <button class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded-full shadow-lg z-[9999] min-w-10 min-h-10"
             @click="changeMapSummaryVisibility(true)">
-      <i class="pi pi-wrench" />
+      <i class="pi pi-cog" />
     </button>
     <map-summary />
 
@@ -31,8 +30,10 @@ import GeolocationButton from '@/components/geolocation-button.vue'
 
 const store = useStore()
 const route = useRoute()
+
 const map = ref(null)
 const mapSummaryVisible = ref(false)
+
 
 provide('mapSummaryVisible', mapSummaryVisible)
 
@@ -47,7 +48,6 @@ const markersAll = ref([])
 watch(
   () => store.state.mapSettings.visibility,
   (visibility) => {
-
     if (visibility && map.value) {
       clearMap(map.value, routeControls.value, markersAll.value)
 
@@ -78,7 +78,7 @@ onDeactivated(() => {
 
 <style scoped>
 #map {
-  height: 500px;
+  height: 90vh;
   width: 100vw;
 }
 
