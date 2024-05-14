@@ -1,12 +1,22 @@
 import Papa from 'papaparse'
 import store from '@/store'
 
+function transformValue(value, columnName) {
+  if (value === '') return ''
+
+  const numberValue = Number(value)
+  if (!isNaN(numberValue)) return numberValue
+
+  return value
+}
+
 export const processCsv = (content) => {
   try {
     const lines = Papa.parse(content, {
       header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true
+      dynamicTyping: false,
+      skipEmptyLines: true,
+      transform: transformValue
     })
     const jsonData = lines.data
     store.dispatch('updateInputPoints', jsonData)
