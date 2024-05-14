@@ -21,7 +21,19 @@ export const config = {
   }
 }
 
+const fixMarkerIcons = () => {
+  delete L.Icon.Default.prototype._getIconUrl
+
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://unpkg.com/leaflet@latest/dist/images/marker-icon-2x.png',
+    iconUrl: 'https://unpkg.com/leaflet@latest/dist/images/marker-icon.png',
+    shadowUrl: 'https://unpkg.com/leaflet@latest/dist/images/marker-shadow.png'
+  })
+}
+
 export const initializeMap = (id) => {
+  fixMarkerIcons()
+
   // TODO: replace with current GPS coords
   const { lat, long } = store.state.currentLocation
   // const center = lat ? [lat, long] : config.defaultLatLong
