@@ -79,8 +79,9 @@ const store = createStore({
       dispatch('updateRouteData', response)
     },
     async optimizeRoute({ state, dispatch }) {
-      if (state.inputPoints.length > 0) {
-        const response = await api.optimizeRoute(state.inputPoints)
+      if (state.inputPoints.length > 0 && state.capacity) {
+        const body = { points: state.inputPoints, capacity: state.capacity }
+        const response = await api.optimizeRoute(body)
         dispatch('updateRouteData', response)
         return response.data?._id || null
       }
