@@ -15,7 +15,7 @@ export const config = {
   defaultLatLong: [59.9342802, 30.3350986],
   key: import.meta.env.VITE_GRAPH_HOPPER_KEY,
   car: {
-    iconUrl: 'car.png',
+    iconUrl: '/img/car.png',
     iconSize: [30, 30],
     iconAnchor: [30, 30]
   }

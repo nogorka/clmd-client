@@ -1,5 +1,8 @@
-const get_base_url = () =>
-  `https://${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}/`
+const get_base_url = () => {
+  if (import.meta.env.VITE_APP_HOST === 'localhost')
+    return `http://${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}/`
+  return `https://${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}/`
+}
 
 
 const post = async (endpoint, body) => {

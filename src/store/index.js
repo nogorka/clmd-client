@@ -9,6 +9,7 @@ const store = createStore({
         long: 0
       },
       inputPoints: [],
+      capacity: 1000,
       optimalRoute: {
         route: [],
         id: null
@@ -27,6 +28,9 @@ const store = createStore({
     },
     setInputPoints(state, points) {
       state.inputPoints = [...points]
+    },
+    setInputCapacity(state, value) {
+      state.capacity = value
     },
     setOptimalRoute(state, route) {
       state.optimalRoute.route = [...route]
@@ -65,6 +69,9 @@ const store = createStore({
     updateInputPoints({ commit }, points) {
       commit('setInputPoints', points)
     },
+    updateCapacity({ commit }, value) {
+      commit('setInputCapacity', value)
+    },
 
 
     async getOptimalRoute({ dispatch }, { id }) {
@@ -72,8 +79,9 @@ const store = createStore({
       dispatch('updateRouteData', response)
     },
     async optimizeRoute({ state, dispatch }) {
-      if (state.inputPoints.length > 0) {
-        const response = await api.optimizeRoute(state.inputPoints)
+      if (state.inputPoints.length > 0 && state.capacity) {
+        const body = { points: state.inputPoints, capacity: state.capacity }
+        const response = await api.optimizeRoute(body)
         dispatch('updateRouteData', response)
         return response.data?._id || null
       }
@@ -81,6 +89,7 @@ const store = createStore({
     updateRouteData({ commit, dispatch }, payload) {
       if (payload.success) {
         const { _id, route, date } = payload.data
+
         const decodedRoute = JSON.parse(route)
         // const decodedRoute = route.map(r =>
         //   r.map(point => JSON.parse(point))
