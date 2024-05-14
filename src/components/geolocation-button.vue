@@ -1,19 +1,21 @@
 <template>
-  <button @click="toggleGeolocation"
-          class="fixed bottom-16 right-4 bg-blue-500 text-white p-2 rounded-full shadow-lg z-[9999] min-w-10 min-h-10">
-   <i class="pi pi-car" ></i>
-  </button>
+  <round-button
+    position="bottom-16 right-4"
+    icon-class="pi pi-car"
+    @clickCallback="toggleGeolocation"
+  />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { config } from '@/utils/map.js'
+import RoundButton from '@/components/round-button.vue'
 
 const props = defineProps({
   map: {
     type: Object || null,
     required: true,
-    default: () => {    }
+    default: () => { }
   }
 })
 

@@ -4,10 +4,11 @@
       <go-back />
     </div>
 
-    <button class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded-full shadow-lg z-[9999] min-w-10 min-h-10"
-            @click="changeMapSummaryVisibility(true)">
-      <i class="pi pi-cog" />
-    </button>
+    <round-button
+      position="bottom-4 right-4"
+      icon-class="pi pi-cog"
+      @clickCallback="changeMapSummaryVisibility(true)"
+    />
     <map-summary />
 
     <geolocation-button :map="map" />
@@ -27,6 +28,7 @@ import { clearMap, initializeMap, visualizePointsFromJson } from '@/utils/map.js
 import GoBack from '@/components/go-back.vue'
 import MapSummary from '@/components/map-summary.vue'
 import GeolocationButton from '@/components/geolocation-button.vue'
+import RoundButton from '@/components/round-button.vue'
 
 const store = useStore()
 const route = useRoute()
