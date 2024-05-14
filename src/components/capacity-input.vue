@@ -8,7 +8,6 @@ const store = useStore()
 const form = ref({ capacity: store.state.capacity })
 
 const onChange = (event) => {
-  console.log(event)
   store.dispatch('updateCapacity', Number(event.target.value))
 }
 </script>
