@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "serve:dev": "vite --mode development",
+    "serve:prod": "vite --mode production"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

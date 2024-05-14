@@ -19,13 +19,9 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-      
+
       - name: Build
         run: npm run build
-        env:
-          VITE_GRAPH_HOPPER_KEY: ${{ secrets.GRAPH_HOPPER_KEY }}
-          VITE_APP_HOST: ${{ secrets.BACKEND_HOST }}
-          VITE_APP_PORT: ${{ secrets.BACKEND_PORT }}
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
@@ -55,6 +51,3 @@ jobs:
           overwrites-pull-request-comment: true
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
           personal-access-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        env:
-          VITE_APP_HOST: ${{ secrets.BACKEND_HOST }}
-          VITE_APP_PORT: ${{ secrets.BACKEND_PORT }}
