@@ -89,11 +89,14 @@ const store = createStore({
     updateRouteData({ commit, dispatch }, payload) {
       if (payload.success) {
         const { _id, route, date } = payload.data
-
-        const decodedRoute = JSON.parse(route)
-        // const decodedRoute = route.map(r =>
-        //   r.map(point => JSON.parse(point))
-        // )
+        let decodedRoute
+        if (typeof route === 'object') {
+          decodedRoute = route.map(r =>
+            r.map(point => JSON.parse(point))
+          )
+        } else {
+          decodedRoute = JSON.parse(route)
+        }
 
         commit('setOptimalRoute', _id)
         commit('setOptimalRoute', decodedRoute)
