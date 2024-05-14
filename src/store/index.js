@@ -9,6 +9,7 @@ const store = createStore({
         long: 0
       },
       inputPoints: [],
+      capacity: 1000,
       optimalRoute: {
         route: [],
         id: null
@@ -27,6 +28,9 @@ const store = createStore({
     },
     setInputPoints(state, points) {
       state.inputPoints = [...points]
+    },
+    setInputCapacity(state, value) {
+      state.capacity = value
     },
     setOptimalRoute(state, route) {
       state.optimalRoute.route = [...route]
@@ -64,6 +68,9 @@ const store = createStore({
 
     updateInputPoints({ commit }, points) {
       commit('setInputPoints', points)
+    },
+    updateCapacity({ commit }, value) {
+      commit('setInputCapacity', value)
     },
 
 
