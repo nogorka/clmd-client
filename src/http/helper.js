@@ -1,9 +1,6 @@
-const get_base_url = () => {
-  let protocol = 'https'
-  if (import.meta.env.DEV) protocol = 'http'
-  console.log(import.meta.env)
-  return `${protocol}://${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}/`
-}
+const get_base_url = () =>
+  `https://${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}/`
+
 
 const post = async (endpoint, body) => {
   const url = get_base_url() + endpoint
@@ -26,7 +23,7 @@ const post = async (endpoint, body) => {
 const get = async (endpoint, paramsObj) => {
   const params = new URLSearchParams(paramsObj)
   const url = new URL(endpoint, get_base_url())
-  url.search = params.toString();
+  url.search = params.toString()
 
   const data = await fetch(url, {
     method: 'GET',
