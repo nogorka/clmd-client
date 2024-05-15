@@ -1,7 +1,12 @@
 <template>
-  <div class="flex gap-2">
-    <span :class="props.icon"></span>
-    <router-link :to="props.to" class="btn"> <slot /></router-link>
+  <div class="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-200 transition">
+    <i :class="['pi', props.icon, 'text-xl']"></i>
+    <router-link
+      :to="props.to"
+      class="flex items-center btn"
+    >
+      <slot />
+    </router-link>
   </div>
 </template>
 
