@@ -5,7 +5,7 @@
     </div>
 
     <round-button
-      position="bottom-4 right-4"
+      position="bottom-2 right-4"
       icon-class="pi pi-cog"
       @clickCallback="changeMapSummaryVisibility(true)"
     />

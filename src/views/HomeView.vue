@@ -11,7 +11,7 @@ import RecentRouteList from '@/components/recent-route-list.vue'
       <div class="flex justify-center gap-4">
         <complex-button icon="pi pi-table" to="/import-file">Import File</complex-button>
         <complex-button icon="pi pi-search" to="/">Input Manually</complex-button>
-        <complex-button icon="pi pi-qrcode" to="/scan-qr">Scan QR Code</complex-button>
+        <complex-button icon="pi pi-qrcode" to="/scan-qr">Scan QR</complex-button>
       </div>
     </div>
     <recent-route-list />

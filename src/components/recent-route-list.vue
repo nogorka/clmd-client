@@ -31,7 +31,7 @@ const getDateString = (dateString) => {
     <hr class="mb-4">
     <ul class="space-y-2">
       <li v-for="route in store.state.recentRoutes" :key="route._id"
-          class="p-4 bg-gray-100 rounded-lg shadow hover:bg-gray-200 transition-colors duration-300">
+          class="p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-200 transition-colors duration-300">
         <div class="flex justify-between items-center">
           <router-link :to="getRouteTo(route._id)" class="text-blue-500 hover:underline">
             {{ getRouteString(route._id) }}
