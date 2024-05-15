@@ -18,7 +18,8 @@ const store = createStore({
         colors: [],
         visibility: []
       },
-      summary: []
+      summary: [],
+      recentRoutes: []
     }
   },
   mutations: {
@@ -49,6 +50,9 @@ const store = createStore({
     },
     setRouteVisibility(state, list) {
       state.mapSettings.visibility = [...list]
+    },
+    setRecentRoutes(state, list) {
+      state.recentRoutes = [...list]
     }
   },
   actions: {
@@ -138,6 +142,12 @@ const store = createStore({
         return index === idx ? newValue : value
       })
       commit('setRouteVisibility', visibility)
+    },
+
+    async updateRecentRoutes({commit}) {
+      const response = await api.getRecentRoutes(10)
+      const list = response.data
+      commit('setRecentRoutes', list)
     }
 
   },

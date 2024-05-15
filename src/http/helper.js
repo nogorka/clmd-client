@@ -47,7 +47,9 @@ const api = {
   optimizeRoute: async (body) =>
     await post('optimize', body),
   getOptimalRoute: async (id) =>
-    await get('route', { id })
+    await get('route', { id }),
+  getRecentRoutes: async (amount) =>
+    await get('route', { amount })
 }
 
 export default api
