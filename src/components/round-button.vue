@@ -23,6 +23,6 @@ const props = defineProps({
 const emits = defineEmits(['clickCallback'])
 
 const buttonClasses = computed(() =>
-  `${props.position} fixed bg-blue-500 text-white p-2 rounded-full shadow-lg z-[9999] min-w-10 min-h-10`)
-
+  `${props.position} fixed bg-blue-500 text-white p-4 rounded-full shadow-lg z-[9999] flex items-center justify-center w-12 h-12`
+)
 </script>
