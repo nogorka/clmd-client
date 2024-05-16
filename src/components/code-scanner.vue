@@ -9,7 +9,17 @@
     @detect="onDetect"
     @camera-on="onCameraReady"
     @camera-off="onCameraDisconnect"
-  />
+  >
+    <select v-model="selectedDevice">
+      <option
+        v-for="device in devices"
+        :key="device.label"
+        :value="device"
+      >
+        {{ device.label }}
+      </option>
+    </select>
+  </qrcode-stream>
 </template>
 
 
@@ -28,13 +38,11 @@ function onDetect(detectedArray) {
   UiMessage.success(`Successfully added: ${resultObject.id}`, 1500)
 }
 
-/*** select camera ***/
 
 const selectedDevice = ref(null)
 const devices = ref([])
 
 onMounted(async () => {
-  // TODO: add changing device
   devices.value = (await navigator.mediaDevices.enumerateDevices()).filter(
     ({ kind }) => kind === 'videoinput'
   )
@@ -52,8 +60,8 @@ function paintBoundingBox(detectedCodes, ctx) {
       boundingBox: { x, y, width, height }
     } = detectedCode
 
-    ctx.lineWidth = 2
-    ctx.strokeStyle = '#007bff'
+    ctx.lineWidth = 6
+    ctx.strokeStyle = '#ff0000'
     ctx.strokeRect(x, y, width, height)
   }
 }
