@@ -22,10 +22,9 @@ store.dispatch('updateRecentRoutes')
     </div>
 
     <list-container title="Latest routes">
-      <li v-for="route in store.state.recentRoutes" :key="route._id"
-          class="p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-200 transition-colors duration-300">
-        <recent-route-item :route="route" />
-      </li>
+      <recent-route-item v-for="route in store.state.recentRoutes"
+                         :key="route._id"
+                         :route="route" />
     </list-container>
   </div>
 </template>

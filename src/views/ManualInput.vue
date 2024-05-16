@@ -31,11 +31,9 @@ onMounted(() => {
     </div>
 
     <list-container title="Added input points">
-      <li v-for="point in store.state.inputPoints" :key="point.id"
-          class="p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-200 transition-colors duration-300"
-      >
-        <input-point-item :point="point" />
-      </li>
+      <input-point-item v-for="point in store.state.inputPoints"
+                        :key="point.id"
+                        :point="point" />
     </list-container>
 
     <div>
