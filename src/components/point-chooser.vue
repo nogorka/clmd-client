@@ -30,7 +30,9 @@ const query = ref('')
 
 const onSubmit = async () => {
   if (query.value) {
+    // TODO: proccess data better
     const pointData = await fetchLocationData(query.value)
+    console.log(pointData)
     if (pointData && pointData.osm_id) {
       const { osm_id, lat, lon, type, address, name } = pointData
       const point = {
@@ -49,5 +51,5 @@ const onSubmit = async () => {
   }
 }
 
-
+// TODO: add autocomplete search
 </script>

@@ -52,6 +52,19 @@ export const initializeMap = (id) => {
   return map
 }
 
+export const visualizeInputPoints = (points, map) => {
+  const markers = points?.map(point => {
+    // const { lat, long } = entry
+    // return L.marker([lat, long]).addTo(map)
+    console.log(point)
+    L.marker([point.lat, point.long]).addTo(map)
+      .bindPopup(`<b>${point.address}</b><br>ID: ${point.id}<br>Lat: ${point.lat}, Long: ${point.long}`)
+
+  })
+  return { markers, lastMarker: markers[markers.length - 1] }
+}
+
+
 // Visualize points from JSON data
 export const visualizePointsFromJson = (jsonData, map, _index) => {
   const markers = []
@@ -104,10 +117,10 @@ const routing = (map, waypoints, index) => {
 }
 
 export const clearMap = (map, controls, markers) => {
-  controls.forEach(control => {
+  controls?.forEach(control => {
     map.removeControl(control)
   })
-  markers.forEach((marker) => {
+  markers?.forEach((marker) => {
     map.removeLayer(marker)
   })
   map.eachLayer((layer) => {
@@ -115,4 +128,12 @@ export const clearMap = (map, controls, markers) => {
       map.removeLayer(layer)
     }
   })
+}
+
+export const changeFocus = (marker, map) => {
+  // TODO: fix
+  if (marker && map) {
+    map.setView(marker.getLatLng(), config.zoom)
+    marker.openPopup()
+  }
 }
