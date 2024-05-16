@@ -26,7 +26,7 @@ const getDateString = (dateString) => {
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto p-4">
+  <div class="max-w-4xl mx-auto py-4">
     <h2 class="text-lg font-bold mb-4">Latest Routes</h2>
     <hr class="mb-4">
     <ul class="space-y-2">

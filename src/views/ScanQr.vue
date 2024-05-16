@@ -1,26 +1,10 @@
 <script setup>
 import GoBack from '@/components/go-back.vue'
 import CodeScanner from '@/components/code-scanner.vue'
-// import { QrcodeStream } from 'vue-qrcode-reader'
+import OptimizeRouteButton from '@/components/optimize-route-button.vue'
+import CapacityInput from '@/components/capacity-input.vue'
+import InputPointsList from '@/components/input-points-list.vue'
 
-// TODO: check scan qr codes and refactor
-// const onDecode = (result) => {
-//   console.log('Decoded result:', result)
-//   // You can route or perform actions based on the result here
-// }
-// const onInit = (promise) => {
-//   promise
-//     .then(() => {
-//       console.log('QR Code scanner initialized')
-//     })
-//     .catch((error) => {
-//       if (error.name === 'NotAllowedError') {
-//         console.error('Permissions to access camera are denied')
-//       } else if (error.name === 'NotFoundError') {
-//         console.error('No camera on this device')
-//       }
-//     })
-// }
 </script>
 
 <template>
@@ -28,7 +12,14 @@ import CodeScanner from '@/components/code-scanner.vue'
     <go-back />
 
     <h1 class="text-center text-2xl font-bold my-4">Scan QR Code</h1>
-    <!--    <qrcode-stream @decode="onDecode" @init="onInit" />-->
     <code-scanner />
+
+    <input-points-list />
+
+    <div>
+      <h1 class="text-center text-2xl font-bold my-4">Input vehicles capacity</h1>
+      <capacity-input />
+    </div>
+    <optimize-route-button />
   </div>
 </template>

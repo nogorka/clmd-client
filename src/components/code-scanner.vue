@@ -35,6 +35,7 @@ const selectedDevice = ref(null)
 const devices = ref([])
 
 onMounted(async () => {
+  // TODO: add changing device
   devices.value = (await navigator.mediaDevices.enumerateDevices()).filter(
     ({ kind }) => kind === 'videoinput'
   )
@@ -58,7 +59,7 @@ function paintBoundingBox(detectedCodes, ctx) {
   }
 }
 
-
+// TODO: Add toggle if use tracking
 const trackFunctionOptions = [
   { text: 'nothing (default)', value: undefined },
   { text: 'bounding box', value: paintBoundingBox }
