@@ -1,10 +1,13 @@
 <script setup>
+import { onMounted } from 'vue'
+
+import { initializeMap } from '@/utils/map.js'
+
 import GoBack from '@/components/go-back.vue'
 import OptimizeRouteButton from '@/components/optimize-route-button.vue'
 import CapacityInput from '@/components/capacity-input.vue'
 import InputPointsList from '@/components/input-points-list.vue'
-import { onMounted } from 'vue'
-import { initializeMap } from '@/utils/map.js'
+import PointChooser from '@/components/point-chooser.vue'
 
 onMounted(() => {
   map.value = initializeMap('map')
@@ -18,7 +21,7 @@ onMounted(() => {
     </div>
 
     <h1 class="text-center text-2xl font-bold my-4">Manually input points</h1>
-
+    <point-chooser />
     <div class="flex h-[450px] w-full">
       <div id="map" />
     </div>
