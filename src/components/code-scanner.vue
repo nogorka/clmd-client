@@ -16,17 +16,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
+import { useStore } from 'vuex'
 
 import { UiMessage } from '@/utils/message-helper.js'
 
-/*** detection handling ***/
+const store = useStore()
 
-const result = ref('')
-
-function onDetect(detectedCodes) {
-  console.log(detectedCodes)
-  result.value = JSON.stringify(detectedCodes.map((code) => code.rawValue))
-  console.log(detectedCodes.map((code) => code.rawValue))
+function onDetect(detectedArray) {
+  const resultObject = JSON.parse(detectedArray.map((code) => code.rawValue))
+  store.dispatch('addInputPoint', resultObject)
 }
 
 /*** select camera ***/
