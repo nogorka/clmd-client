@@ -1,6 +1,12 @@
 <script setup>
+import { useStore } from 'vuex'
+
 import ComplexButton from '@/components/complex-button.vue'
-import RecentRouteList from '@/components/recent-route-list.vue'
+import RecentRouteItem from '@/components/recent-route-item.vue'
+import ListContainer from '@/components/list-container.vue'
+
+const store = useStore()
+store.dispatch('updateRecentRoutes')
 
 </script>
 
@@ -14,6 +20,12 @@ import RecentRouteList from '@/components/recent-route-list.vue'
         <complex-button icon="pi pi-qrcode" to="/scan-qr">Scan QR</complex-button>
       </div>
     </div>
-    <recent-route-list />
+
+    <list-container title="Latest routes">
+      <li v-for="route in store.state.recentRoutes" :key="route._id"
+          class="p-4 rounded-lg border-2 border-gray-200 hover:bg-gray-200 transition-colors duration-300">
+        <recent-route-item :route="route" />
+      </li>
+    </list-container>
   </div>
 </template>
