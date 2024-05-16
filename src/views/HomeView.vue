@@ -10,7 +10,7 @@ import RecentRouteList from '@/components/recent-route-list.vue'
       <h1 class="text-center text-2xl font-bold my-4">Welcome! Choose an input method:</h1>
       <div class="flex justify-center gap-4">
         <complex-button icon="pi pi-table" to="/import-file">Import File</complex-button>
-        <complex-button icon="pi pi-search" to="/">Input Manually</complex-button>
+        <complex-button icon="pi pi-search" to="/manual-input">Input Manually</complex-button>
         <complex-button icon="pi pi-qrcode" to="/scan-qr">Scan QR</complex-button>
       </div>
     </div>
