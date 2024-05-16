@@ -31,7 +31,7 @@ const query = ref('')
 const onSubmit = async () => {
   if (query.value) {
     const pointData = await fetchLocationData(query.value)
-    if (pointData.osm_id) {
+    if (pointData && pointData.osm_id) {
       const { osm_id, lat, lon, type, address, name } = pointData
       const point = {
         id: osm_id,
