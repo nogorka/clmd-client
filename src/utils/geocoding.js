@@ -18,7 +18,7 @@ const processUrl = (queryString) => {
   console.log(queryString)
   const query = encodeURIComponent(queryString.trim())
   const params = new URLSearchParams({ format: 'json' })
-  let endpoint = ''
+  let endpoint
 
   if (isCoordinates(queryString)) {
     endpoint = 'reverse'

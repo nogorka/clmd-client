@@ -1,12 +1,6 @@
 <script setup>
-import { useStore } from 'vuex'
-
-import ComplexButton from '@/components/complex-button.vue'
-import RecentRouteItem from '@/components/recent-route-item.vue'
-import ListContainer from '@/components/list-container.vue'
-
-const store = useStore()
-store.dispatch('updateRecentRoutes')
+import ComplexButton from '@/components/buttons/complex-button.vue'
+import RecentRouteList from '@/components/lists/recent-route-list.vue'
 
 </script>
 
@@ -21,10 +15,7 @@ store.dispatch('updateRecentRoutes')
       </div>
     </div>
 
-    <list-container title="Latest routes">
-      <recent-route-item v-for="route in store.state.recentRoutes"
-                         :key="route._id"
-                         :route="route" />
-    </list-container>
+    <recent-route-list />
+
   </div>
 </template>

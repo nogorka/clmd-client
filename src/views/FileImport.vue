@@ -1,7 +1,7 @@
 <script setup>
 import GoBack from '@/components/go-back.vue'
 import { processCsv, processJson } from '@/utils/process-file-formats.js'
-import OptimizeRouteButton from '@/components/optimize-route-button.vue'
+import OptimizeRouteButton from '@/components/buttons/optimize-route-button.vue'
 import CapacityInput from '@/components/capacity-input.vue'
 
 const onChange = (e) => {
