@@ -7,24 +7,31 @@ const isCoordinates = (query) => {
   return coordinateRegex.test(query)
 }
 
+const setURLSearchParamsObject = (params, obj) => Object.entries(obj).forEach(
+  ([key, value]) => {
+    params.append(key, value)
+  }
+)
+
 const processUrl = (queryString) => {
   if (!queryString) return null
-
+  console.log(queryString)
   const query = encodeURIComponent(queryString.trim())
   const params = new URLSearchParams({ format: 'json' })
-  let url
+  let endpoint = ''
 
   if (isCoordinates(queryString)) {
-    url = new URL('reverse', baseUrl)
+    endpoint = 'reverse'
     const [lat, lon] = queryString.split(',')
-    params.append('lat', lat)
-    params.append('lon', lon)
+    setURLSearchParamsObject(params, { lat, lon })
   } else {
-    url = new URL('search', baseUrl)
-    params.append('q', query)
-    params.append('limit', 1)
+    endpoint = 'search'
+    setURLSearchParamsObject(params, { 'q': query, 'limit': 1 })
   }
+
+  const url = new URL(endpoint, baseUrl)
   url.search = params.toString()
+
   return url
 }
 

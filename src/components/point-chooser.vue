@@ -1,23 +1,52 @@
 <template>
-  <el-form :inline="true" :model="form">
-    <el-form-item>
-      <el-input v-model="form.query" placeholder="Enter address or coordinates" clearable />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click.enter="onSubmit">Search</el-button>
-    </el-form-item>
-  </el-form>
+  <form @submit.prevent
+        class="flex items-center my-4 gap-2">
+    <input
+      type="search"
+      v-model="query"
+      class="block w-full p-2 mx-auto border-2 border-gray-300 rounded-lg hover:border-blue-500 focus:border-blue-500"
+      placeholder="Enter address or coordinates"
+    />
+    <button
+      @click="onSubmit"
+      class="flex items-center justify-center px-4 py-2 text-blue-500 rounded-lg border-2 border-blue-500 hover:bg-blue-500 hover:text-white"
+    >
+      Search
+      <i class="pi pi-search ml-2"></i>
+    </button>
+
+  </form>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { fetchLocationData } from '@/utils/geocoding.js'
+import { useStore } from 'vuex'
 
-const form = ref({ query: '' })
+import { fetchLocationData } from '@/utils/geocoding.js'
+import { UiMessage } from '@/utils/message-helper.js'
+
+const store = useStore()
+const query = ref('')
 
 const onSubmit = async () => {
-  const point = await fetchLocationData(form.query)
-  console.log(point)
+  if (query.value) {
+    const pointData = await fetchLocationData(query.value)
+    if (pointData.osm_id) {
+      const { osm_id, lat, lon, type, address, name } = pointData
+      const point = {
+        id: osm_id,
+        long: lon,
+        adress: address.toString() + ' ' + name,
+        type,
+        lat
+      }
+      console.log(point)
+
+      await store.dispatch('addInputPoint', point)
+    }
+  } else {
+    UiMessage.warning('Empty location query')
+  }
 }
 
 
