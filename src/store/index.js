@@ -75,6 +75,8 @@ const store = createStore({
     },
     addInputPoint({ commit, state }, point) {
       if (point.lat && point.long && point.id && point.adress) {
+        const hasPointList = state.inputPoints.filter(p => p.id === point.id)
+        if (hasPointList.length > 0) return
         commit('setInputPoints', [point, ...state.inputPoints])
       }
     },

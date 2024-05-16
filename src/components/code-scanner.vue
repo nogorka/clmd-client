@@ -25,6 +25,7 @@ const store = useStore()
 function onDetect(detectedArray) {
   const resultObject = JSON.parse(detectedArray.map((code) => code.rawValue))
   store.dispatch('addInputPoint', resultObject)
+  UiMessage.success(`Successfully added: ${resultObject.id}`, 1500)
 }
 
 /*** select camera ***/
