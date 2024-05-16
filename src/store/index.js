@@ -73,6 +73,13 @@ const store = createStore({
     updateInputPoints({ commit }, points) {
       commit('setInputPoints', points)
     },
+    addInputPoint({ commit, state }, point) {
+      if (point.lat && point.long && point.id && point.adress) {
+        const hasPointList = state.inputPoints.filter(p => p.id === point.id)
+        if (hasPointList.length > 0) return
+        commit('setInputPoints', [point, ...state.inputPoints])
+      }
+    },
     updateCapacity({ commit }, value) {
       commit('setInputCapacity', value)
     },
@@ -144,7 +151,7 @@ const store = createStore({
       commit('setRouteVisibility', visibility)
     },
 
-    async updateRecentRoutes({commit}) {
+    async updateRecentRoutes({ commit }) {
       const response = await api.getRecentRoutes(10)
       const list = response.data
       commit('setRecentRoutes', list)

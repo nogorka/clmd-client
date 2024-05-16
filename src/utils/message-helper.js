@@ -13,8 +13,8 @@ export const UiMessage = (() => {
   return types.reduce((accumulator, type) => {
     return {
       ...accumulator,
-      [type](message) {
-        ElMessage({ type, message, plain: true })
+      [type](message, duration = 3000) {
+        ElMessage({ type, message, duration, showClose: true, plain: true })
       }
     }
   }, {})
