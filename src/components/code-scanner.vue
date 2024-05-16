@@ -1,11 +1,14 @@
 <template>
   <qrcode-stream
     v-if="selectedDevice !== null"
+    v-loading="cameraLoading"
     :constraints="{ deviceId: selectedDevice.deviceId }"
     :track="trackFunctionSelected.value"
     :formats="['qr_code']"
     @error="onError"
     @detect="onDetect"
+    @camera-on="onCameraReady"
+    @camera-off="onCameraDisconnect"
   />
 </template>
 
@@ -79,4 +82,16 @@ const onError = (error) => {
   const message = `${error.name}: ` + (errorMessages[error.name] || error.message)
   UiMessage.error(message, 0)
 }
+
+const cameraLoading = ref(true)
+
+const onCameraReady = (event) => {
+  cameraLoading.value = false
+}
+
+const onCameraDisconnect = (event) => {
+  cameraLoading.value = true
+}
+
+
 </script>
