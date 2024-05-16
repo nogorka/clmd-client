@@ -3,32 +3,44 @@
     v-if="selectedDevice !== null"
     v-loading="cameraLoading"
     :constraints="{ deviceId: selectedDevice.deviceId }"
-    :track="trackFunctionSelected.value"
+    :track="trackFunctionSelected"
     :formats="['qr_code']"
     @error="onError"
     @detect="onDetect"
     @camera-on="onCameraReady"
     @camera-off="onCameraDisconnect"
   >
-    <select v-model="selectedDevice">
-      <option
-        v-for="device in devices"
-        :key="device.label"
-        :value="device"
-      >
-        {{ device.label }}
-      </option>
-    </select>
+    <div class="flex justify-between">
+      <select v-model="selectedDevice">
+        <option
+          v-for="device in devices"
+          :key="device.label"
+          :value="device"
+        >
+          {{ device.label }}
+        </option>
+      </select>
+      <div>
+        <span>Show tracking </span>
+        <el-switch
+          v-model="useTrack"
+          inline-prompt
+          :active-icon="Check"
+          :inactive-icon="Close"
+        />
+      </div>
+    </div>
   </qrcode-stream>
 </template>
 
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { useStore } from 'vuex'
 
 import { UiMessage } from '@/utils/message-helper.js'
+import { Check, Close } from '@element-plus/icons-vue'
 
 const store = useStore()
 
@@ -66,12 +78,16 @@ function paintBoundingBox(detectedCodes, ctx) {
   }
 }
 
-// TODO: Add toggle if use tracking
+const useTrack = ref(true)
 const trackFunctionOptions = [
   { text: 'nothing (default)', value: undefined },
   { text: 'bounding box', value: paintBoundingBox }
 ]
-const trackFunctionSelected = ref(trackFunctionOptions[1])
+const trackFunctionSelected = computed(
+  () => useTrack.value === true ?
+    trackFunctionOptions[1].value :
+    trackFunctionOptions[0].value
+)
 
 
 /*** error handling ***/
