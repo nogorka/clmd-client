@@ -1,25 +1,20 @@
 <template>
-  <div>
-    <p class="text-red-600 font-semibold">{{ error }}</p>
-
-    <div>
-      <qrcode-stream
-        v-if="selectedDevice !== null"
-        :constraints="{ deviceId: selectedDevice.deviceId }"
-        :track="trackFunctionSelected.value"
-        :formats="selectedBarcodeFormats"
-        @error="onError"
-        @detect="onDetect"
-      />
-      <p v-else class="text-red-600 font-semibold"> No cameras on this device </p>
-    </div>
-  </div>
+  <qrcode-stream
+    v-if="selectedDevice !== null"
+    :constraints="{ deviceId: selectedDevice.deviceId }"
+    :track="trackFunctionSelected.value"
+    :formats="['qr_code']"
+    @error="onError"
+    @detect="onDetect"
+  />
 </template>
 
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
+
+import { UiMessage } from '@/utils/message-helper.js'
 
 /*** detection handling ***/
 
@@ -67,45 +62,21 @@ const trackFunctionOptions = [
 ]
 const trackFunctionSelected = ref(trackFunctionOptions[1])
 
-/*** barcode formats ***/
-
-const barcodeFormats = { qr_code: true }
-const selectedBarcodeFormats = computed(() => {
-  return Object.keys(barcodeFormats.value).filter((format) => barcodeFormats.value[format])
-})
 
 /*** error handling ***/
 
-const error = ref('')
+const errorMessages = {
+  NotAllowedError: 'Camera access permission is required. Please grant permission.',
+  NotFoundError: 'No camera detected on this device.',
+  NotSupportedError: 'A secure context is required (HTTPS or localhost).',
+  NotReadableError: 'Unable to access the camera. It might be in use by another application.',
+  OverconstrainedError: 'The available cameras do not meet the required constraints.',
+  StreamApiNotSupportedError: 'The Stream API is not supported by this browser.',
+  InsecureContextError: 'Camera access is only allowed in a secure context. Please use HTTPS or localhost.'
+}
 
-function onError(err) {
-  error.value = `[${err.name}]: `
-
-  if (err.name === 'NotAllowedError') {
-    error.value += 'you need to grant camera access permission'
-  } else if (err.name === 'NotFoundError') {
-    error.value += 'no camera on this device'
-  } else if (err.name === 'NotSupportedError') {
-    error.value += 'secure context required (HTTPS, localhost)'
-  } else if (err.name === 'NotReadableError') {
-    error.value += 'is the camera already in use?'
-  } else if (err.name === 'OverconstrainedError') {
-    error.value += 'installed cameras are not suitable'
-  } else if (err.name === 'StreamApiNotSupportedError') {
-    error.value += 'Stream API is not supported in this browser'
-  } else if (err.name === 'InsecureContextError') {
-    error.value +=
-      'Camera access is only permitted in secure context. Use HTTPS or localhost rather than HTTP.'
-  } else {
-    error.value += err.message
-  }
+const onError = (error) => {
+  const message = `${error.name}: ` + (errorMessages[error.name] || error.message)
+  UiMessage.error(message, 0)
 }
 </script>
-
-<style scoped>
-
-.barcode-format-checkbox {
-  margin-right: 10px;
-  white-space: nowrap;
-}
-</style>
