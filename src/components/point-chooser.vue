@@ -31,7 +31,9 @@ const query = ref('')
 const onSubmit = async () => {
   if (query.value) {
     const point = await searchPoint(query.value)
-    await store.dispatch('addInputPoint', point)
+    if (point) {
+      await store.dispatch('addInputPoint', point)
+    }
   } else {
     UiMessage.warning('Empty location query')
   }

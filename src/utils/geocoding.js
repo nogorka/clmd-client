@@ -25,7 +25,7 @@ const processUrl = (queryString) => {
   if (isCoordinates(query)) {
     endpoint = 'reverse'
     const [lat, lon] = query.split(',')
-    setURLSearchParamsObject(params, { lat, lon })
+    setURLSearchParamsObject(params, { lat: lat.trim(), lon: lon.trim() })
   } else {
     endpoint = 'search'
     setURLSearchParamsObject(params, { 'q': query, 'limit': 1 })
@@ -37,23 +37,28 @@ const processUrl = (queryString) => {
   return url
 }
 
-const fetchLocationData = async (url) => {
+export const fetchLocationData = async (url) => {
   try {
     if (url) {
+
       const response = await fetch(url)
       const data = await response.json()
 
-      if (data?.osm_id) {
-        return data
-      } else if (data?.length && data?.length > 0 && data[0].osm_id) {
-        return data[0]
-      } else {
+      if (data && data.error) {
+        UiMessage.error(data.error)
+        return null
+      }
+
+      if (data && data.length && data[0].osm_id) return data[0]
+      else if (data && data.osm_id) return data
+      else {
         UiMessage.error('No location data found')
         return null
       }
     }
   } catch (error) {
     UiMessage.error('Error fetching location data')
+    return null
   }
 }
 
@@ -62,12 +67,17 @@ export const searchPoint = async (query) => {
   const url = processUrl(query)
   const pointData = await fetchLocationData(url)
 
+    // TODO: ask for capacity for each input point
   if (pointData && pointData.osm_id) {
     return {
       id: pointData.osm_id,
       long: pointData.lon,
       adress: pointData.display_name || pointData.name || pointData.address,
-      lat: pointData.lat
+      lat: pointData.lat,
+      purpose: '',
+      type: '',
+      free_volume: 0,
+      total_volume: 0
     }
   }
   return null
