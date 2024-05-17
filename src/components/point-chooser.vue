@@ -22,7 +22,7 @@
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 
-import { fetchLocationData } from '@/utils/geocoding.js'
+import { searchPoint } from '@/utils/geocoding.js'
 import { UiMessage } from '@/utils/message-helper.js'
 
 const store = useStore()
@@ -30,22 +30,9 @@ const query = ref('')
 
 const onSubmit = async () => {
   if (query.value) {
-    // TODO: proccess data better
-    const pointData = await fetchLocationData(query.value)
-    console.log(pointData)
-    if (pointData && pointData.osm_id) {
-      const { osm_id, lat, lon, type, address, name } = pointData
-      const point = {
-        id: osm_id,
-        long: lon,
-        adress: address.toString() + ' ' + name,
-        type,
-        lat
-      }
-      console.log(point)
-
-      await store.dispatch('addInputPoint', point)
-    }
+    const point = await searchPoint(query.value)
+    console.log(point)
+    await store.dispatch('addInputPoint', point)
   } else {
     UiMessage.warning('Empty location query')
   }

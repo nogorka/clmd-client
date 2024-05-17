@@ -16,8 +16,10 @@ const setURLSearchParamsObject = (params, obj) => Object.entries(obj).forEach(
 const processUrl = (queryString) => {
   if (!queryString) return null
   console.log(queryString)
-  const query = encodeURIComponent(queryString.trim())
-  const params = new URLSearchParams({ format: 'json' })
+  const query = queryString.trim()
+  const params = new URLSearchParams(
+    { format: 'jsonv2', countrycodes: 'ru', 'accept-language': 'ru-RU' }
+  )
   let endpoint
 
   if (isCoordinates(queryString)) {
@@ -35,20 +37,35 @@ const processUrl = (queryString) => {
   return url
 }
 
-export const fetchLocationData = async (query) => {
-  const url = processUrl(query)
-
+const fetchLocationData = async (url) => {
   try {
     if (url) {
       const response = await fetch(url)
-      const data = await response.json()
-      if (data.osm_id) {
-        return data
+      const [point] = await response.json()
+      if (point.osm_id) {
+        return point
       } else {
         UiMessage.error('No location data found')
+        return null
       }
     }
   } catch (error) {
     UiMessage.error('Error fetching location data')
   }
+}
+
+
+export const searchPoint = async (query) => {
+  const url = processUrl(query)
+  const pointData = await fetchLocationData(url)
+
+  if (pointData && pointData.osm_id) {
+    return {
+      id: pointData.osm_id,
+      long: pointData.lon,
+      adress: pointData.address || pointData.display_name || pointData.name,
+      lat: pointData.lat
+    }
+  }
+  return null
 }
