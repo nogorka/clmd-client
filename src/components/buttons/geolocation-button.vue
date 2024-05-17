@@ -9,7 +9,7 @@
 <script setup>
 import { inject, ref } from 'vue'
 import { config } from '@/utils/map.js'
-import RoundButton from '@/components/round-button.vue'
+import RoundButton from '@/components/buttons/round-button.vue'
 
 const map = inject('map')
 

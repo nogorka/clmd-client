@@ -27,8 +27,8 @@ import { useRoute } from 'vue-router'
 import { clearMap, initializeMap, visualizePointsFromJson } from '@/utils/map.js'
 import GoBack from '@/components/go-back.vue'
 import MapSummary from '@/components/map-summary.vue'
-import GeolocationButton from '@/components/geolocation-button.vue'
-import RoundButton from '@/components/round-button.vue'
+import GeolocationButton from '@/components/buttons/geolocation-button.vue'
+import RoundButton from '@/components/buttons/round-button.vue'
 
 const store = useStore()
 const route = useRoute()

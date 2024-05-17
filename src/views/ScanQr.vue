@@ -1,9 +1,9 @@
 <script setup>
 import GoBack from '@/components/go-back.vue'
 import CodeScanner from '@/components/code-scanner.vue'
-import OptimizeRouteButton from '@/components/optimize-route-button.vue'
+import OptimizeRouteButton from '@/components/buttons/optimize-route-button.vue'
 import CapacityInput from '@/components/capacity-input.vue'
-import InputPointsList from '@/components/input-points-list.vue'
+import InputPointList from '@/components/lists/input-point-list.vue'
 
 </script>
 
@@ -14,7 +14,7 @@ import InputPointsList from '@/components/input-points-list.vue'
     <h1 class="text-center text-2xl font-bold my-4">Scan QR Code</h1>
     <code-scanner />
 
-    <input-points-list />
+   <input-point-list />
 
     <div>
       <h1 class="text-center text-2xl font-bold my-4">Input vehicles capacity</h1>

@@ -52,6 +52,13 @@ export const initializeMap = (id) => {
   return map
 }
 
+export const visualizeInputPoints = (points, map) => {
+  const markers = points?.map(({ lat, long }) =>
+    L.marker([lat, long]).addTo(map))
+  return { markers, lastMarker: markers[0] }
+}
+
+
 // Visualize points from JSON data
 export const visualizePointsFromJson = (jsonData, map, _index) => {
   const markers = []
@@ -71,10 +78,6 @@ const numberIconMarker = (number) =>
     className: config.numberedMarkerCSS,
     html: number
   })
-
-// const router = (key) => new L.Routing.GraphHopper(key, {
-//   urlParameters: { vehicle: 'car' }
-// })
 
 const lineStyles = (index) => {
   return [
@@ -104,10 +107,10 @@ const routing = (map, waypoints, index) => {
 }
 
 export const clearMap = (map, controls, markers) => {
-  controls.forEach(control => {
+  controls?.forEach(control => {
     map.removeControl(control)
   })
-  markers.forEach((marker) => {
+  markers?.forEach((marker) => {
     map.removeLayer(marker)
   })
   map.eachLayer((layer) => {
@@ -115,4 +118,11 @@ export const clearMap = (map, controls, markers) => {
       map.removeLayer(layer)
     }
   })
+}
+
+export const changeFocus = (marker, map) => {
+  if (marker && map) {
+    map.setView(marker.getLatLng(), config.zoom)
+    marker.openPopup()
+  }
 }
