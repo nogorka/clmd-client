@@ -15,16 +15,16 @@ const setURLSearchParamsObject = (params, obj) => Object.entries(obj).forEach(
 
 const processUrl = (queryString) => {
   if (!queryString) return null
-  console.log(queryString)
+
   const query = queryString.trim()
   const params = new URLSearchParams(
     { format: 'jsonv2', countrycodes: 'ru', 'accept-language': 'ru-RU' }
   )
   let endpoint
 
-  if (isCoordinates(queryString)) {
+  if (isCoordinates(query)) {
     endpoint = 'reverse'
-    const [lat, lon] = queryString.split(',')
+    const [lat, lon] = query.split(',')
     setURLSearchParamsObject(params, { lat, lon })
   } else {
     endpoint = 'search'

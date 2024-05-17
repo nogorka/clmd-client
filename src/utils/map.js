@@ -55,7 +55,7 @@ export const initializeMap = (id) => {
 export const visualizeInputPoints = (points, map) => {
   const markers = points?.map(({ lat, long }) =>
     L.marker([lat, long]).addTo(map))
-  return { markers, lastMarker: markers[markers.length - 1] }
+  return { markers, lastMarker: markers[0] }
 }
 
 
@@ -78,10 +78,6 @@ const numberIconMarker = (number) =>
     className: config.numberedMarkerCSS,
     html: number
   })
-
-// const router = (key) => new L.Routing.GraphHopper(key, {
-//   urlParameters: { vehicle: 'car' }
-// })
 
 const lineStyles = (index) => {
   return [
