@@ -20,7 +20,6 @@ onMounted(() => {
 })
 
 const updateMarkers = (inputPoints) => {
-  // TODO: add map point drawing
   if (inputPoints && inputPoints.length > 0 && map.value) {
     clearMap(map.value, null, markersAll.value)
 

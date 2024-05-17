@@ -53,14 +53,8 @@ export const initializeMap = (id) => {
 }
 
 export const visualizeInputPoints = (points, map) => {
-  const markers = points?.map(point => {
-    // const { lat, long } = entry
-    // return L.marker([lat, long]).addTo(map)
-    console.log(point)
-    L.marker([point.lat, point.long]).addTo(map)
-      .bindPopup(`<b>${point.address}</b><br>ID: ${point.id}<br>Lat: ${point.lat}, Long: ${point.long}`)
-
-  })
+  const markers = points?.map(({ lat, long }) =>
+    L.marker([lat, long]).addTo(map))
   return { markers, lastMarker: markers[markers.length - 1] }
 }
 
@@ -131,7 +125,6 @@ export const clearMap = (map, controls, markers) => {
 }
 
 export const changeFocus = (marker, map) => {
-  // TODO: fix
   if (marker && map) {
     map.setView(marker.getLatLng(), config.zoom)
     marker.openPopup()
