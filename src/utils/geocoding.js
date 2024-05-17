@@ -41,9 +41,12 @@ const fetchLocationData = async (url) => {
   try {
     if (url) {
       const response = await fetch(url)
-      const [point] = await response.json()
-      if (point.osm_id) {
-        return point
+      const data = await response.json()
+
+      if (data?.osm_id) {
+        return data
+      } else if (data?.length && data?.length > 0 && data[0].osm_id) {
+        return data[0]
       } else {
         UiMessage.error('No location data found')
         return null
@@ -63,7 +66,7 @@ export const searchPoint = async (query) => {
     return {
       id: pointData.osm_id,
       long: pointData.lon,
-      adress: pointData.address || pointData.display_name || pointData.name,
+      adress: pointData.display_name || pointData.name || pointData.address,
       lat: pointData.lat
     }
   }
